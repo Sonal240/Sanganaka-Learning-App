@@ -23,7 +23,7 @@ so that I can [ACCOMPLISH THAT].
 
 ## Definition of Done
 - [ ] All of the required items are completed.
-- [ ] Approval by 1 mentor.
+- [ ] Approval by 1 team member.
 
 ## Estimation
 [INSERT NUMBER HERE] hours
