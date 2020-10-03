@@ -1,0 +1,19 @@
+{
+  "name": "sanganaka-learning-app",
+  "version": "1.0.0",
+  "description": "A learning app curated for beginners",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sonal240/Sanganaka-Learning-App.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sonal240/Sanganaka-Learning-App/issues"
+  },
+  "homepage": "https://github.com/Sonal240/Sanganaka-Learning-App#readme"
+}
