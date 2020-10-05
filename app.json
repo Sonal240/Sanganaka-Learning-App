@@ -1,0 +1,12 @@
+{
+  "name": "Sanganaka-Learning-App",
+  "displayName": "Sanganaka-Learning-App",
+  "expo": {
+    "name": "Sanganaka-Learning-App",
+    "slug": "Sanganaka-Learning-App",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
