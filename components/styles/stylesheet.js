@@ -1,5 +1,5 @@
-import { StyleSheet} from 'react-native';
-
+import { StyleSheet, Dimensions} from 'react-native';
+//const {windowWidth, windowHeight}= Dimensions.get('screen');
 export default StyleSheet.create({
     container: {
         flex: 1,
@@ -10,12 +10,21 @@ export default StyleSheet.create({
     img_c: {
         height: 200,
         width: 200,
-        marginTop: 250
+        marginTop: 256
     },
     appfont: {
         color: '#064789',
-        fontSize: 20,
+        fontSize: 24,
         position: 'fixed',
-        bottom: 30
-    }
+        bottom: 32
+    },
+    carouselImg:{
+        height: '15rem',
+        width: '21rem',
+        marginTop: '12rem',
+        marginRight:'auto',
+        marginLeft:'auto',
+
+    },
+
 });
