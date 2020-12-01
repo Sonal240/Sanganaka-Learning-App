@@ -3,11 +3,7 @@ import Carousel from 'react-material-ui-carousel';
 import {View, Image, Text} from 'react-native';
 import styles from './styles/stylesheet';
 import {Button, Typography,Box} from '@material-ui/core';
-import { spacing} from '@material-ui/system';
 
-const theme={
-    spacing:8,
-}
 
  export default function WelcomeScreen(){
     const slide_image_detail=[
