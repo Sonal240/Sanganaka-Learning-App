@@ -8,9 +8,12 @@ import WelcomeScreen from './components/WelcomeScreenComponent';
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Home />
-    </NavigationContainer>
+        <View>
+        <WelcomeScreen/>
+    </View>
+    // <NavigationContainer>
+    //   <Home />
+    // </NavigationContainer>
 //import { Loading } from './components/LoadingComponent';
 //import Start from './components/MainComponent';
 
