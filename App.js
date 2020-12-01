@@ -10,14 +10,14 @@ import LogInScreen from './components/LoginPhoneNumber';
 
 export default function App() {
   return (
-        <View>
-        <LogInScreen />
+    //     <View>
+    //     <LogInScreen />
         
-    </View>
-    // <NavigationContainer>
+    // </View>
+    <NavigationContainer>
+      <Home />
+    </NavigationContainer>
     // <WelcomeScreen/>
-    //   <Home />
-    // </NavigationContainer>
 //import { Loading } from './components/LoadingComponent';
 //import Start from './components/MainComponent';
 
