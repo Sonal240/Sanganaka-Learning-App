@@ -26,5 +26,10 @@ export default StyleSheet.create({
         marginLeft:'auto',
 
     },
+    tinyLogo: {
+        width: 40,
+        height: 40,
+        marginLeft: '35%'
+    },
 
 });
