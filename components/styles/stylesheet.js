@@ -31,5 +31,11 @@ export default StyleSheet.create({
         height: 40,
         marginLeft: '35%'
     },
+    fontBlue: {
+        color: '#044789',
+        fontSize: 20,
+        marginTop: 20,
+        marginLeft: 10
+    }
 
 });

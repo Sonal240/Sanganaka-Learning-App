@@ -8,17 +8,16 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography';
 import styles from './styles/stylesheet.js';
+import Slider from './carousel';
 
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import clsx from 'clsx';
-
+import Paper from '@material-ui/core/Paper';
+import InputBase from '@material-ui/core/InputBase';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 
 
@@ -42,6 +41,24 @@ const useStyles = makeStyles((theme) => ({
     fullList: {
         width: 'auto',
     },
+    root2: {
+        display: 'flex',
+        borderRadius: 20,
+        width: '75%',
+        marginLeft: '15%',
+        marginTop: 20
+    },
+    input: {
+        marginLeft: theme.spacing(1),
+        flex: 1,
+    },
+    iconButton: {
+        padding: 10,
+    },
+    divider: {
+        height: 28,
+        margin: 4,
+    },
 }));
 
 
@@ -59,6 +76,19 @@ export default function Homescreen() {
 
         setState({ ...state, [anchor]: open });
     };
+
+    const projectList = [
+        {
+            title: "Cutting Edge Project",
+            image: "https://source.unsplash.com/collection/347317/",
+            description: "Praesent quis congue nisi...",
+        },
+        {
+            title: "Featured Artist 3D",
+            image: "https://source.unsplash.com/collection/3573299/",
+            description: "Duis at tellus vitae velit aliquet varius...",
+        },
+    ];
 
 
     const list = (anchor) => (
@@ -107,9 +137,20 @@ export default function Homescreen() {
                                 </Toolbar>
                             </AppBar>
                         </div>
-                    <Text>
-                        I am homescreen
-                    </Text>
+                        <Paper component="form" className={classes.root2}>
+                            <InputBase
+                                className={classes.input}
+                                placeholder="Ask a question"
+                                inputProps={{ 'aria-label': 'search google maps' }}
+                            />
+                            <IconButton color="primary" className={classes.iconButton} aria-label="directions">
+                                <AddCircleIcon />
+                            </IconButton>
+                        </Paper>
+                        <Text style= {styles.fontBlue}>
+                            Recent Questions
+                        </Text>
+                    <Slider list={projectList}></Slider>
                 </ScrollView>
             );
 }
