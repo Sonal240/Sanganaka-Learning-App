@@ -13,6 +13,7 @@ import Homescreen from './homeScreen';
 import Profilescreen from './profileScreen';
 import Qscreen  from './qaScreen';
 import Chatscreen from './chatScreen';
+import Articles from './articleDisplay';
 
 
 
@@ -49,11 +50,14 @@ const useStyles = makeStyles({
 export default function SimpleBottomNavigation() {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
-    let [currentScreen, setScreen] = React.useState(<Homescreen />)
+    function tryme(props) {
+        setScreen(<Articles info= {props} />)
+    }
+    let [currentScreen, setScreen] = React.useState(<Homescreen setScreenChild={tryme} />);
     function displaySceen(val) {
         switch (val) {
             case 0:
-                currentScreen = setScreen(<Homescreen />)
+                currentScreen = setScreen(<Homescreen setScreenChild={tryme}/>)
                 break;
             case 1:
                 currentScreen = setScreen(<Qscreen />)

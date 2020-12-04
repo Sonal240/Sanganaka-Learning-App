@@ -6,6 +6,7 @@ import Home from './components/homeComponent';
 import { NavigationContainer } from '@react-navigation/native';
 import WelcomeScreen from './components/WelcomeScreenComponent';
 import LogInScreen from './components/LoginPhoneNumber';
+import Article from './components/articleDisplay';
 
 
 export default function App() {
