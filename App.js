@@ -3,11 +3,11 @@ import { View } from 'react-native';
 //import { Loading } from './components/LoadingComponent';
 //import Start from './components/MainComponent';
 //import LogInScreen from './components/LoginPhoneNumber';
-import SignUp from './components/SignUpComponent';
+import ChatBot from './components/ChatBotComponent';
 export default function App() {
   return (
     <View>
-        <SignUp/>
+        <ChatBot/>
     </View>
   );
 }
