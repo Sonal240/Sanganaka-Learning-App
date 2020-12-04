@@ -7,6 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import WelcomeScreen from './components/WelcomeScreenComponent';
 import LogInScreen from './components/LoginPhoneNumber';
 import Article from './components/articleDisplay';
+import ChatBot from './components/ChatBotComponent';
 
 
 export default function App() {
