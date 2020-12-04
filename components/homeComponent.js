@@ -104,7 +104,7 @@ export default function SimpleBottomNavigation() {
                 selected: classes.icon
             }} icon={<SmsIcon />} />
             
-            <BottomNavigationAction label="People" classes={{
+            <BottomNavigationAction label="Profile" classes={{
                 root: classes.icon_dis,
                 selected: classes.icon
             }} icon={<PersonIcon />} />
