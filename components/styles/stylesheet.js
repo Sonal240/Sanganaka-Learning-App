@@ -9,8 +9,7 @@ export default StyleSheet.create({
     },
     img_c: {
         height: 200,
-        width: 200,
-        marginTop: 256
+        width: 200
     },
     appfont: {
         color: '#064789',

@@ -11,7 +11,7 @@ firebase.initializeApp(config);
 
 const uiConfig = {
   signInFlow: 'popup',
-  signInSuccessUrl: '/signedIn',
+  signInSuccessUrl: 'home',
   signInOptions: [
     firebase.auth.PhoneAuthProvider.PROVIDER_ID
   ]

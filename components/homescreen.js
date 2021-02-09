@@ -14,8 +14,19 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Topbar from './topbar';
 
 
-import { projectList } from './list'
+import { projectList } from './list';
+const firebase = require('firebase');
 
+const firebaseConfig = {
+    apiKey: "AIzaSyAve9SFpbBZeS40BMYwD4KNzMoht1SyxnI",
+    authDomain: "sanganaka-f8486.firebaseapp.com",
+    databaseURL: "https://sanganaka-f8486.firebaseio.com",
+    projectId: "sanganaka-f8486",
+    storageBucket: "sanganaka-f8486.appspot.com",
+    messagingSenderId: "891657383270",
+    appId: "1:891657383270:web:8c5be227feed61ed8aeca7",
+    measurementId: "G-VLFG4CWX78"
+};
 
 
 const useStyles = makeStyles((theme) => ({
