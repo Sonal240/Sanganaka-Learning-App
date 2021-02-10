@@ -9,9 +9,13 @@ const config = {
 };
 firebase.initializeApp(config);
 
+
 const uiConfig = {
   signInFlow: 'popup',
-  signInSuccessUrl: 'home',
+  callbacks: {
+      // Avoid redirects after sign-in.
+      signInSuccessWithAuthResult: () => false
+    },
   signInOptions: [
     firebase.auth.PhoneAuthProvider.PROVIDER_ID
   ]
@@ -19,12 +23,34 @@ const uiConfig = {
 
 
 class LogInScreen extends React.Component {
-  render() {
-    return (
-      <Box my='16rem'>
-        <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
-      </Box>
+  state = {
+    isSignedIn: false // Local signed-in state.
+  };
+  componentDidMount() {
+    this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(
+        (user) => {
+          this.setState({isSignedIn: !!user})}
     );
+  }
+  componentWillUnmount() {
+    this.unregisterAuthObserver();
+  }
+  render() {
+    if (!this.state.isSignedIn) {
+      return (
+        <Box my='6rem'>
+          <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
+        </Box>
+      );
+    }
+    else {
+      return (
+        <div>
+          <h1>Signed IN</h1>
+          <a onClick={() => firebase.auth().signOut()}>Sign-out</a>
+        </div>
+      );
+    }
   }
 }
 
