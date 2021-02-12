@@ -5,6 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import {Box, TextField, FormControl, InputLabel,Select,MenuItem} from '@material-ui/core';
 import {View, Text} from 'react-native';
 import styles from './styles/stylesheet';
+import firebase from 'firebase';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,18 +57,67 @@ function UploadButtons(props) {
   );
 }
 
-export default function SignUp(){
+export default function SignUp(props){
+  var user = firebase.auth().currentUser;
+
+  const db = firebase.firestore();
+
   const [levelOfLearning,setLol]= React.useState('');
   const [name,setName]= React.useState('');
   const [email,setEmail]= React.useState('');
   const [photo,setPic]= React.useState(require('./images/user.png'));
   const handleChange=(event) =>{setLol(event.target.value)}
+  const [b64,setB64]= React.useState('');
   const picChange = (event) => {
+    var FR= new FileReader();
+    FR.addEventListener("load", function(e) {
+      setB64(e.target.result)
+    }); 
+    FR.readAsDataURL( event.target.files[0] );
     var src = URL.createObjectURL(event.target.files[0]);
     setPic(src);
   }
+  var details={};
+  details.email= user.email;
+  details.name= user.displayName;
+  const navigate= props.navigation.navigate;
+  console.log(details);
   const emailChange=(event) =>{setEmail(event.target.value)}
   const nameChange=(event) =>{setName(event.target.value)}
+  const submit=()=> {
+    user.updateEmail(email).then(() => {
+      console.log("emailchanged")
+    })
+    .then(
+    user.updateProfile({
+    displayName: name
+    }))
+    .then(function() {
+      console.log("Name changed")
+    })
+    .then(
+      db.collection("users").add({
+                photo: b64,
+                lol: levelOfLearning,
+                phno: user.phoneNumber
+            }).then(()=> {
+                console.log("data uploaded");
+                var details={}
+                details.name = user.displayName;
+                details.email = user.email;
+                details.phno = user.phoneNumber;
+                details.photo = b64;
+                details.lol = levelOfLearning;
+                navigate('home', details);
+            })
+            .catch(err=> {
+              console.log(err)
+            })
+    )
+    .catch(function(error) {
+      console.log(error);
+    });
+    }
     return(
       <Box marginTop='2rem'>
         <View style={styles.container}>
@@ -87,7 +137,7 @@ export default function SignUp(){
               </FormControl>
             </Box>
             <Box mt='3rem'>
-                <Button variant='contained' color='primary' style={{width:150}}>Submit</Button>
+                <Button variant='contained' color='primary' onClick={submit} style={{width:150}}>Submit</Button>
             </Box>
         </View>  
       </Box>

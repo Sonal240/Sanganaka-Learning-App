@@ -33,7 +33,7 @@ import {Button, Typography,Box} from '@material-ui/core';
             </Carousel>  
             <Box my='3rem'>
                  <Button variant="contained" size="medium" color="primary" style={{width:150}} onClick={() => props.navigation.navigate('login')}>Log In</Button>
-                 <Button variant="outlined" size="medium" color="primary"style={{width:150}} onClick={() => props.navigation.navigate('signup')}>Sign Up</Button>
+                 <Button variant="outlined" size="medium" color="primary"style={{width:150}} onClick={() => props.navigation.navigate('login')}>Sign Up</Button>
             </Box>
             
         </View>

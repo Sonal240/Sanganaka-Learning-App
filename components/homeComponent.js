@@ -58,7 +58,9 @@ const useStyles = makeStyles({
 
 
 
-export default function SimpleBottomNavigation() {
+export default function SimpleBottomNavigation(props) {
+    const details = props.route.params;
+    console.log(details);
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
     function tryme(props) {

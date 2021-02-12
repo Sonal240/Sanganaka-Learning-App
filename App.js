@@ -11,6 +11,19 @@ import Article from './components/articleDisplay';
 import Signup from './components/SignUpComponent';
 import ChatBot from './components/ChatBotComponent';
 import { createStackNavigator } from '@react-navigation/stack';
+import firebase from 'firebase';
+
+const config = {
+  apiKey: 'AIzaSyAve9SFpbBZeS40BMYwD4KNzMoht1SyxnI',
+  authDomain: 'sanganaka-f8486.firebaseapp.com',
+  databaseURL: "https://sanganaka-f8486.firebaseio.com",
+  projectId: "sanganaka-f8486",
+  storageBucket: "sanganaka-f8486.appspot.com",
+  messagingSenderId: "891657383270",
+  appId: "1:891657383270:web:8c5be227feed61ed8aeca7",
+  measurementId: "G-VLFG4CWX78"
+};
+firebase.initializeApp(config);
 
 const Stack = createStackNavigator();
 
