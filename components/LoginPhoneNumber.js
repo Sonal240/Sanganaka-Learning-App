@@ -2,6 +2,7 @@ import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from 'firebase';
 import {Box} from '@material-ui/core';
+import { Loading } from './LoadingComponent';
 
 
 
@@ -76,8 +77,9 @@ class LogInScreen extends React.Component {
     else {
       return (
         <div>
-          <h1>Signed IN</h1>
-          <a onClick={() => firebase.auth().signOut()}>Sign-out</a>
+          <Loading />
+          {/* <h1>Signed IN</h1>
+          <a onClick={() => firebase.auth().signOut()}>Sign-out</a> */}
         </div>
       );
     }

@@ -12,21 +12,10 @@ import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Topbar from './topbar';
+import firebase from 'firebase';
 
 
 import { projectList } from './list';
-const firebase = require('firebase');
-
-const firebaseConfig = {
-    apiKey: "AIzaSyAve9SFpbBZeS40BMYwD4KNzMoht1SyxnI",
-    authDomain: "sanganaka-f8486.firebaseapp.com",
-    databaseURL: "https://sanganaka-f8486.firebaseio.com",
-    projectId: "sanganaka-f8486",
-    storageBucket: "sanganaka-f8486.appspot.com",
-    messagingSenderId: "891657383270",
-    appId: "1:891657383270:web:8c5be227feed61ed8aeca7",
-    measurementId: "G-VLFG4CWX78"
-};
 
 
 const useStyles = makeStyles((theme) => ({
@@ -73,6 +62,36 @@ const useStyles = makeStyles((theme) => ({
 export default function Homescreen(props) {
     const classes = useStyles();
     const preventDefault = (event) => event.preventDefault();
+    let [articles, updateArt] = React.useState("null");
+    const db = firebase.firestore();
+    var art=[];
+    const fetchArticles = () => {
+        db.collection('articles').get().then((snapshot)=> {
+            snapshot.docs.map((doc) => {
+                art.push(
+                    {
+                        link: doc.data().article_link,
+                        category: doc.data().category,
+                        content: doc.data().content,
+                        credits: doc.data().credits,
+                        id: doc.data().id,
+                        images: doc.data().images,
+                        interest: doc.data().interest,
+                        sub: doc.data().subBy,
+                        topic: doc.data().topic,
+                        videos: doc.data().videos
+                    }
+                )
+            })
+            .then(updateArt(art))
+            .catch((err)=> {
+                console.log(err);
+            })
+        })
+        .catch((err)=> {
+            console.log(err);
+        })
+    }
 
                 return (
                     <div style={{paddingBottom: 100}}>
@@ -91,14 +110,14 @@ export default function Homescreen(props) {
                                 <Text style= {styles.fontBlue}>
                                     Recent Questions
                                 </Text>
-                                <Slider list="null"></Slider>
+                                <Slider list="ques"></Slider>
                                 <Text style={styles.fontBlue}>
                                     Latest Articles
                                 </Text>
                                 <Link href="#" onClick={preventDefault}>
                                     <Text style={styles.fontBlue2}>View All</Text>
                                 </Link>
-                                <Slider list={projectList} setMe={props.setScreenChild}></Slider>
+                                <Slider list={articles} setMe={props.setScreenChild} fetchAll={fetchArticles}></Slider>
                         </ScrollView>
                     </div>
             );

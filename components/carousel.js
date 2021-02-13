@@ -9,6 +9,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { Loading } from './LoadingComponent';
 
 
 
@@ -38,6 +39,14 @@ export default function SliderComp(props) {
     const classes = useStyles();
     var cards = [];
     if(props.list === "null") {
+        props.fetchAll();
+        for (let i = 0; i < 3; i++) {
+            cards.push(
+                <Loading />
+            )
+        }
+    }
+    else if(props.list === "ques") {
         for (let i = 0; i < 3; i++) {
             cards.push(
                 <Card className={classes.root}>
