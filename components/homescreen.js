@@ -76,7 +76,7 @@ export default function Homescreen(props) {
 
                 return (
                     <div style={{paddingBottom: 100}}>
-                        <Topbar />
+                        <Topbar navigation={props.navigation} />
                         <ScrollView>
                                 <Paper component="form" className={classes.root2}>
                                     <InputBase

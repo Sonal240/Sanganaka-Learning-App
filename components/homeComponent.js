@@ -66,11 +66,11 @@ export default function SimpleBottomNavigation(props) {
     function tryme(props) {
         setScreen(<Articles info= {props} />)
     }
-    let [currentScreen, setScreen] = React.useState(<Homescreen setScreenChild={tryme} />);
+    let [currentScreen, setScreen] = React.useState(<Homescreen setScreenChild={tryme} navigation={props.navigation}/>);
     function displaySceen(val) {
         switch (val) {
             case 0:
-                currentScreen = setScreen(<Homescreen setScreenChild={tryme}/>)
+                currentScreen = setScreen(<Homescreen setScreenChild={tryme} navigation={props.navigation} />)
                 break;
             case 1:
                 currentScreen = setScreen(<Qscreen />)

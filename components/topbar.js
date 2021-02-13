@@ -13,6 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './styles/stylesheet.js';
 import { Image } from 'react-native';
+import firebase from 'firebase';
 
 
 
@@ -58,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function Topbar() {
+export default function Topbar(props) {
     const classes = useStyles();
 
     const [state, setState] = React.useState({
@@ -74,6 +75,11 @@ export default function Topbar() {
         setState({ ...state, [anchor]: open });
     };
 
+    const signout = ()=> {
+        firebase.auth().signOut();
+        props.navigation.navigate('welcome');
+    }
+
     const list = (anchor) => (
         <div
             className={clsx(classes.list, {
@@ -84,10 +90,10 @@ export default function Topbar() {
             onKeyDown={toggleDrawer(anchor, false)}
         >
             <List>
-                {['Home', 'Profile', 'Chat', 'Your Questions', 'Contribute', 'Q&As', 'Contact Us'].map((text, index) => (
-                    <ListItem button key={text} selected={text === 'Home' ? true : false}>
-                        <ListItemText primary={text} />
-                    </ListItem>
+                {['Home', 'Profile', 'Chat', 'Your Questions', 'Contribute', 'Q&As', 'Contact Us', 'Logout'].map((text, index) => (
+                        <ListItem button key={text} selected={text === 'Home' ? true : false} onClick= {text === 'Logout'? signout: console.log('hello')}>
+                            <ListItemText primary={text} />
+                        </ListItem>
                 ))}
             </List>
         </div>
