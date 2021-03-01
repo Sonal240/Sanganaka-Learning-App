@@ -1,17 +1,15 @@
-import 'react-native-gesture-handler';
-import React from 'react';
-import { View } from 'react-native';
-import { Loading } from './components/LoadingComponent';
-import Start from './components/MainComponent';
-import Home from './components/homeComponent';
-import { NavigationContainer } from '@react-navigation/native';
-import WelcomeScreen from './components/WelcomeScreenComponent';
-import LogInScreen from './components/LoginPhoneNumber';
-import Article from './components/articleDisplay';
-import Signup from './components/SignUpComponent';
+import { View ,Text, SafeAreaView} from 'react-native';
+//import { Loading } from './components/LoadingComponent';
+//import Start from './components/MainComponent';
+//import Home from './components/homeComponent';
+//import { NavigationContainer } from '@react-navigation/native';
+//import WelcomeScreen from './components/WelcomeScreenComponent';
+//import LogInScreen from './components/LoginPhoneNumber';
+//import Article from './components/articleDisplay';
+//import Signup from './components/SignUpComponent';
 import ChatBot from './components/ChatBotComponent';
-import { createStackNavigator } from '@react-navigation/stack';
-
+//import { createStackNavigator } from '@react-navigation/stack';
+/*
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -21,8 +19,8 @@ export default function App() {
         
     // </View>
     <NavigationContainer>
-      {/* <WelcomeScreen /> */}
-      <Stack.Navigator>
+      {/* <WelcomeScreen /> */
+    /*  <Stack.Navigator>
         <Stack.Screen
           name="started"
           component={Start}          
@@ -61,18 +59,18 @@ export default function App() {
         />
         
       </Stack.Navigator>
-      {/* <ChatBot /> */}
-    </NavigationContainer>
+      {/* <ChatBot /> */
+  /*  </NavigationContainer>*/
     // <WelcomeScreen/>
 //import { Loading } from './components/LoadingComponent';
 //import Start from './components/MainComponent';
 
 
-// export default function App() {
-//   return (
-//     <View>
-//         <WelcomeScreen/>
-//     </View>
+ export default function App() {
+   return (
+     <SafeAreaView>
+       <ChatBot/>
+     </SafeAreaView>
   );
 }
 

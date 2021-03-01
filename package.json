@@ -40,6 +40,7 @@
     "react-material-ui-carousel": "^2.1.1",
     "react-native": "~0.63.3",
     "react-native-elements": "^2.3.2",
+    "react-native-dialogflow": "^3.2.2",
     "react-native-gesture-handler": "~1.7.0",
     "react-native-gifted-chat": "^0.16.3",
     "react-native-material-design": "^0.3.7",
@@ -48,7 +49,8 @@
     "react-native-screens": "~2.10.1",
     "react-native-unimodules": "~0.11.0",
     "react-native-vector-icons": "^7.1.0",
-    "react-native-web": "~0.13.12"
+    "react-native-voice": "^0.3.0",
+    "react-native-web": "^0.15.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
