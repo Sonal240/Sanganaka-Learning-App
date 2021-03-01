@@ -32,11 +32,22 @@
     "react-dom": "16.13.1",
     "react-material-ui-carousel": "^2.1.1",
     "react-native": "~0.63.3",
+<<<<<<< Updated upstream
+=======
+    "react-native-dialogflow": "^3.2.2",
+    "react-native-elements": "^2.3.2",
+>>>>>>> Stashed changes
     "react-native-gesture-handler": "~1.7.0",
     "react-native-reanimated": "~1.13.0",
     "react-native-screens": "~2.10.1",
     "react-native-unimodules": "~0.11.0",
+<<<<<<< Updated upstream
     "react-native-web": "~0.13.12"
+=======
+    "react-native-vector-icons": "^7.1.0",
+    "react-native-voice": "^0.3.0",
+    "react-native-web": "^0.15.0"
+>>>>>>> Stashed changes
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
