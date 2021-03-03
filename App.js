@@ -33,7 +33,7 @@ export default function App() {
         
     // </View>
     <NavigationContainer>
-      {/* <WelcomeScreen /> */}
+      {/* <WelcomeScreen /> */
       <Stack.Navigator>
         <Stack.Screen
           name="started"
@@ -73,18 +73,14 @@ export default function App() {
         />
         
       </Stack.Navigator>
-      {/* <ChatBot /> */}
+      {/* <ChatBot /> */
     </NavigationContainer>
     // <WelcomeScreen/>
 //import { Loading } from './components/LoadingComponent';
 //import Start from './components/MainComponent';
 
 
-// export default function App() {
-//   return (
-//     <View>
-//         <WelcomeScreen/>
-//     </View>
+ 
   );
 }
 
