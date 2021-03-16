@@ -13,54 +13,22 @@ import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './styles/stylesheet.js';
 import { Image } from 'react-native';
+import { Icon } from 'react-native-elements'
+
 import firebase from 'firebase';
+import Homescreen from './homescreen.js';
+
+import {
+  createDrawerNavigator
+} from '@react-navigation/drawer';
 
 
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-    },
-    menuButton: {
-        marginRight: theme.spacing(2),
-    },
-    title: {
-        flexGrow: 1,
-        color: '#000'
-    },
-    notiButton: {
-        marginRight: theme.spacing(1),
-    },
-    list: {
-        width: 250,
-    },
-    fullList: {
-        width: 'auto',
-    },
-    root2: {
-        display: 'flex',
-        borderRadius: 20,
-        width: '75%',
-        marginLeft: '15%',
-        marginTop: 20
-    },
-    input: {
-        marginLeft: theme.spacing(1),
-        flex: 1,
-    },
-    iconButton: {
-        padding: 10,
-    },
-    divider: {
-        height: 28,
-        margin: 4,
-    },
-}));
 
 
 
 export default function Topbar(props) {
-    const classes = useStyles();
+
+    const Drawer = createDrawerNavigator();
 
     const [state, setState] = React.useState({
         left: false,
@@ -99,27 +67,19 @@ export default function Topbar(props) {
         </div>
     );
     return (
-        <AppBar position="static" color="transparent">
-            <Toolbar>
-                <IconButton edge="start" className={classes.menuButton}
-                    color="default" aria-label="menu"
-                    onClick={toggleDrawer('left', true)}
-                >
-                    <MenuIcon />
-                </IconButton>
-                <Drawer anchor='left' open={state['left']} onClose={toggleDrawer('left', false)}>
-                    {list('left')}
-                </Drawer>
-                <Typography variant="h6" className={classes.title}>
-                    <Image
-                        style={styles.tinyLogo}
-                        source={require('./images/logo1.png')}
-                    />
-                </Typography>
-                <IconButton edge="end" color="inherit" aria-label="menu" color="Default">
-                    <NotificationsIcon />
-                </IconButton>
-            </Toolbar>
-        </AppBar>
+        <>
+            <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
+                <Drawer.Screen name="Home" component={Homescreen} />
+                <Drawer.Screen name="Profile" component={Homescreen} />
+            </Drawer.Navigator>
+            <Icon 
+                name="menu" />
+            <Image
+                style={{ width: 50, height: 50 }}
+                source={require('./images/logo1.png')}
+                />
+            <Icon 
+                name="notifications" />
+        </>
     );
 }

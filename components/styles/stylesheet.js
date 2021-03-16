@@ -11,16 +11,10 @@ export default StyleSheet.create({
         height: 200,
         width: 200
     },
-    appfont: {
-        color: '#064789',
-        fontSize: 24,
-        position: 'fixed',
-        bottom: 32
-    },
     carouselImg:{
-        height: '15rem',
-        width: '21rem',
-        marginTop: '12rem',
+        height: 200,
+        width: 200,
+        marginTop: `40%`,
         marginRight:'auto',
         marginLeft:'auto',
 
@@ -33,7 +27,7 @@ export default StyleSheet.create({
     fontBlue: {
         color: '#044789',
         fontSize: 20,
-        marginTop: 20,
+        marginBottom: 50,
         marginLeft: 10
     },
     fontBlue2: {

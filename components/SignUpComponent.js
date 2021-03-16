@@ -1,89 +1,63 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import {Box, TextField, FormControl, InputLabel,Select,MenuItem} from '@material-ui/core';
-import {View, Text} from 'react-native';
+import {
+  Text,
+  View,
+  Button,
+  TextInput,
+  Image
+} from 'react-native';
 import styles from './styles/stylesheet';
-import firebase from 'firebase';
+import * as firebase from 'firebase';
+import { Picker } from '@react-native-community/picker';
+import * as ImagePicker from 'expo-image-picker';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      mx:'auto',
-    },
-  },
-  input: {
-    display: 'none',
-  },
-  IconButton:{
-      color: '#ffffff',
-  },
-  Button:{
-      opacity: 0.7,
-      width: '6rem',
-      height: '6rem'
-  },
-  FormControl:{
-    marginTop: '2rem'
-  },
-  imgSize: {
-    width: 100,
-    height: 100
-  }
-}));
 
-function UploadButtons(props) {
-  const classes = useStyles();
 
-  return (
-    <div className={classes.root}>
-      <input
-        accept="image/*"
-        className={classes.input}
-        id="contained-button-file"
-        multiple
-        type="file"
-        onChange={props.set}
-      />
-      <label htmlFor="contained-button-file">
-        <Button variant="contained" color="primary" className={classes.Button} component="span">
-        <IconButton fontSize='large' className={classes.IconButton} aria-label="upload picture" component="span">
-          <img src={props.photo} className={classes.imgSize} />
-        </IconButton>
-        </Button>
-      </label>
-    </div>
-  );
-}
-
-export default function SignUp(props){
+export default function SignUp(props) {
   var user = firebase.auth().currentUser;
 
   const db = firebase.firestore();
 
-  const [levelOfLearning,setLol]= React.useState('');
+  const [levelOfLearning,setLol]= React.useState('0');
   const [name,setName]= React.useState('');
   const [email,setEmail]= React.useState('');
-  const [photo,setPic]= React.useState(require('./images/user.png'));
-  const handleChange=(event) =>{setLol(event.target.value)}
+  const [photo,setPic]= React.useState(null);
+  
   const [b64,setB64]= React.useState('');
-  const picChange = (event) => {
-    var FR= new FileReader();
-    FR.addEventListener("load", function(e) {
-      setB64(e.target.result)
-    }); 
-    FR.readAsDataURL( event.target.files[0] );
-    var src = URL.createObjectURL(event.target.files[0]);
-    setPic(src);
+
+  let openImagePickerAsync = async () => {
+    let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+
+    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+
+    if (pickerResult.cancelled === true) {
+      return;
+    }
+
+    setPic({ localUri: pickerResult.uri });
+    const response = await fetch(photo.localUri);
+    const blob = await response.blob();
+    var reader = new FileReader();
+    reader.readAsDataURL(blob); 
+    reader.onloadend = function() {
+     var base64data = reader.result;                
+     setB64(base64data);
+    }
+
   }
+
+
   var details={};
-  details.email= user.email;
-  details.name= user.displayName;
+  if(user) {
+    details.email= user.email;
+    details.name= user.displayName;
+  }
   const navigate= props.navigation.navigate;
-  console.log(details);
-  const emailChange=(event) =>{setEmail(event.target.value)}
-  const nameChange=(event) =>{setName(event.target.value)}
   const submit=()=> {
     user.updateEmail(email).then(() => {
       console.log("emailchanged")
@@ -119,27 +93,43 @@ export default function SignUp(props){
     });
     }
     return(
-      <Box marginTop='2rem'>
-        <View style={styles.container}>
-            <UploadButtons photo={photo} set={picChange}/>
-            <Text style={{marginTop:'1rem'}}>Upload Photo</Text>
-            <TextField style={{marginTop:'3rem'}} variant='outlined' label='Name' onChange={nameChange} />
-            <TextField style={{marginTop:'2rem'}} variant='outlined' label='Email' onChange={emailChange} />
-            <Box mt='2rem'>
-              <FormControl style={{width: '14rem'}} variant='outlined'>
-                <InputLabel id='level'>Level of Learning</InputLabel>
-                  <Select labelId='level' id='level-id' value={levelOfLearning} onChange={handleChange}>
-                    <MenuItem value={0}>None</MenuItem>
-                    <MenuItem value={1}>Beginner</MenuItem>
-                    <MenuItem value={2}>Intermediate</MenuItem>
-                    <MenuItem value={3}>Advanced</MenuItem>
-                  </Select>
-              </FormControl>
-            </Box>
-            <Box mt='3rem'>
-                <Button variant='contained' color='primary' onClick={submit} style={{width:150}}>Submit</Button>
-            </Box>
-        </View>  
-      </Box>
+      <View style={styles.container}>
+        <Image
+        source={photo==null?require('./images/user.png'):{uri: photo.localUri}}
+        style={{width: '50%', height: 200, resizeMode: 'contain'}}
+         />
+        <Button title="Upload Pic" onPress={openImagePickerAsync} />
+        <TextInput style={{ height: 60, textAlign: 'center',
+          width: '60%', borderColor: 'gray', 
+          borderWidth: 1, fontSize: 20,
+        marginTop: 20,
+        borderColor: 'blue', color: 'blue'}} 
+        variant='outlined' 
+        placeholder='Name' 
+        onChangeText={text=> setName(text)}
+        autoCompleteType="username" />
+        <TextInput style={{ height: 60, marginTop: 20, 
+        marginBottom: 20, borderColor: 'gray', 
+        borderWidth: 1, width: '60%',
+        fontSize: 20, textAlign: 'center',
+        borderColor: 'blue', color: 'blue' }} 
+        variant='outlined' 
+        placeholder='Email' 
+        onChangeText={text=> setEmail(text)}
+        autoCompleteType= "email" />
+        <Text id='level'>Level of Learning</Text>
+          <Picker 
+          selectedValue={levelOfLearning} 
+          style={{ height: 100, width: '60%' }}
+          onValueChange={(itemValue, itemIndex)=> setLol(itemValue)}>
+            <Picker.item label="none" value="0" />
+            <Picker.item label='Beginner' value="1" />
+            <Picker.item label='Intermediate' value="2" />
+            <Picker.item label='Advanced' value="3" />
+          </Picker>
+        <Button title="Submit" 
+        onPress= {submit}
+        />
+      </View>  
     );
 }

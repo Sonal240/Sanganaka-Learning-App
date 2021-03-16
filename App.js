@@ -10,7 +10,8 @@ import Article from './components/articleDisplay';
 import Signup from './components/SignUpComponent';
 import ChatBot from './components/ChatBotComponent';
 import { createStackNavigator } from '@react-navigation/stack';
-import firebase from 'firebase';
+import * as firebase from 'firebase';
+import Topbar from './components/topbar';
 
 const config = {
   apiKey: 'AIzaSyAve9SFpbBZeS40BMYwD4KNzMoht1SyxnI',
@@ -52,6 +53,7 @@ export default function App() {
         <Stack.Screen
           name="login"
           component={LogInScreen}
+          options={{ title: 'Login/Signup' }}
         />
         <Stack.Screen
           name="signup"
@@ -61,7 +63,7 @@ export default function App() {
           name="home"
           component={Home}
           options= {{
-            headerShown: false
+            headerTitle: props => <Topbar {...props} />
           }}
         />
         <Stack.Screen
