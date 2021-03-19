@@ -35,7 +35,9 @@ export default function App() {
     // </View>
     <NavigationContainer>
       {/* <WelcomeScreen /> */}
-      <Stack.Navigator>
+      <Stack.Navigator
+        initialRouteName= "started"
+      >
         <Stack.Screen
           name="started"
           component={Start}          
