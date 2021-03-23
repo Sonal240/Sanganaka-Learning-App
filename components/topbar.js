@@ -4,7 +4,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography';
-import Drawer from '@material-ui/core/Drawer';
+
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -12,23 +12,22 @@ import clsx from 'clsx';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import styles from './styles/stylesheet.js';
-import { Image } from 'react-native';
-import { Icon } from 'react-native-elements'
+import {View, Image} from 'react-native';
+import { Icon } from 'react-native-elements';
 
 import firebase from 'firebase';
-import Homescreen from './homescreen.js';
 
-import {
-  createDrawerNavigator
-} from '@react-navigation/drawer';
+import { Dimensions } from "react-native";
 
 
+const screenWidth = Math.round(Dimensions.get('window').width);
 
 
 
-export default function Topbar(props) {
 
-    const Drawer = createDrawerNavigator();
+
+
+export default function Topbar({options}) {
 
     const [state, setState] = React.useState({
         left: false,
@@ -67,19 +66,28 @@ export default function Topbar(props) {
         </div>
     );
     return (
-        <>
-            <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
-                <Drawer.Screen name="Home" component={Homescreen} />
-                <Drawer.Screen name="Profile" component={Homescreen} />
-            </Drawer.Navigator>
+        <View
+            style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                width: screenWidth,
+                marginTop: 20
+            }}
+        >
             <Icon 
-                name="menu" />
+                name="menu" 
+                size= {30}
+                onPress= {()=> options.navigation.openDrawer()} />
             <Image
-                style={{ width: 50, height: 50 }}
+                style={{ width: 50, height: 50, }}
                 source={require('./images/logo1.png')}
                 />
             <Icon 
-                name="notifications" />
-        </>
+                name="notifications"
+                size= {30}
+                 />
+        </View>
     );
 }

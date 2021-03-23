@@ -11,7 +11,9 @@ import Signup from './components/SignUpComponent';
 import ChatBot from './components/ChatBotComponent';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as firebase from 'firebase';
-import Topbar from './components/topbar';
+
+
+
 
 const config = {
   apiKey: 'AIzaSyAve9SFpbBZeS40BMYwD4KNzMoht1SyxnI',
@@ -65,7 +67,8 @@ export default function App() {
           name="home"
           component={Home}
           options= {{
-            headerTitle: props => <Topbar {...props} />
+            headerShown: false,
+            headerLeft: null
           }}
         />
         <Stack.Screen

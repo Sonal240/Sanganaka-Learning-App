@@ -6,10 +6,14 @@ import Qscreen  from './qaScreen';
 import Chatscreen from './chatScreen';
 import Articles from './articleDisplay';
 
+import {
+  createDrawerNavigator
+} from '@react-navigation/drawer';
 
 
 
 
+const Drawer = createDrawerNavigator();
 
 // const screenWidth = Math.round(Dimensions.get('window').width);
 
@@ -66,9 +70,21 @@ export default function SimpleBottomNavigation(props) {
                 break;
         }
     }
+
+    props.navigation.addListener('beforeRemove', (e)=> {
+        e.preventDefault();
+    })
     return (
         <>
-            {currentScreen}
+            <Drawer.Navigator>
+                <Drawer.Screen name="Home" component={Homescreen} />
+                <Drawer.Screen name="Profile" component={Homescreen} />
+                <Drawer.Screen name="Q&A" component={Homescreen} />
+                <Drawer.Screen name="Contribute" component={Homescreen} />
+                <Drawer.Screen name="Contact Us" component={Homescreen} />
+                <Drawer.Screen name="Logout" component={Homescreen} />
+            </Drawer.Navigator>
+            
 
             {/* <BottomNavigation
                 value={value}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, Text, Image } from 'react-native';
+import { ScrollView, Text, Image, View } from 'react-native';
 import Topbar from './topbar';
 import firebase from 'firebase';
 
@@ -43,8 +43,8 @@ export default function Homescreen(props) {
     }
 
                 return (
-                    <>
-                        
-                    </>
+                    <View>
+                        <Topbar options={props} />    
+                    </View>
             );
 }

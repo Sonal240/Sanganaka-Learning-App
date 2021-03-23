@@ -23,7 +23,6 @@ const useStyles = makeStyles({
 export default function Start(props) {
     const classes = useStyles();
     const propsc = props;
-    firebase.auth().onAuthStateChanged(()=> {
         setTimeout(()=>{
             const user= firebase.auth().currentUser;
             const db = firebase.firestore();
@@ -39,7 +38,11 @@ export default function Start(props) {
             console.log(user);
             if(!details) {
                 firebase.auth().signOut();
-                propsc.navigation.navigate('welcome');
+                details={};
+                details.name = 'Neo Anoman';
+                details.phno = '+917052646932';
+                details.email = 'neoanoman@gmail.com';
+                propsc.navigation.navigate('home', details);
             }
             else {
                 const navigate= propsc.navigation.navigate;
@@ -63,7 +66,6 @@ export default function Start(props) {
                 })
             }
         } ,1000);
-    })
     
     return (
         <View style={styles.container}>
