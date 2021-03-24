@@ -10,6 +10,7 @@ import {
   createDrawerNavigator
 } from '@react-navigation/drawer';
 
+import Tabs from './tabComponent';
 
 
 
@@ -77,7 +78,7 @@ export default function SimpleBottomNavigation(props) {
     return (
         <>
             <Drawer.Navigator>
-                <Drawer.Screen name="Home" component={Homescreen} />
+                <Drawer.Screen name="Home" component={Tabs} />
                 <Drawer.Screen name="Profile" component={Homescreen} />
                 <Drawer.Screen name="Q&A" component={Homescreen} />
                 <Drawer.Screen name="Contribute" component={Homescreen} />

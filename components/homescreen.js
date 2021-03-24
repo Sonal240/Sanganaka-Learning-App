@@ -8,7 +8,6 @@ import { projectList } from './list';
 
 
 
-
 export default function Homescreen(props) {
     const preventDefault = (event) => event.preventDefault();
     let [articles, updateArt] = React.useState("null");
