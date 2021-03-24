@@ -87,11 +87,7 @@ export default function App() {
 //import Start from './components/MainComponent';
 
 
-// export default function App() {
-//   return (
-//     <View>
-//         <WelcomeScreen/>
-//     </View>
+ 
   );
 }
 
