@@ -8,7 +8,6 @@ import WelcomeScreen from './components/WelcomeScreenComponent';
 import LogInScreen from './components/LoginPhoneNumber';
 import Article from './components/articleDisplay';
 import Signup from './components/SignUpComponent';
-import ChatBot from './components/ChatBotComponent';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as firebase from 'firebase';
 

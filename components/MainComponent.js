@@ -38,11 +38,12 @@ export default function Start(props) {
             console.log(user);
             if(!details) {
                 firebase.auth().signOut();
-                details={};
-                details.name = 'Neo Anoman';
-                details.phno = '+917052646932';
-                details.email = 'neoanoman@gmail.com';
-                propsc.navigation.navigate('home', details);
+                propsc.navigation.navigate('welcome');
+                // details={};
+                // details.name = 'Neo Anoman';
+                // details.phno = '+917052646932';
+                // details.email = 'neoanoman@gmail.com';
+                // propsc.navigation.navigate('home', details);
             }
             else {
                 const navigate= propsc.navigation.navigate;
