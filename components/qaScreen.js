@@ -1,18 +1,16 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { View, Text } from 'react-native';
+import Topbar from './topbar';
 
 
-export default class Homescreen extends React.Component {
-    render() {
+export default function qaScreen(props) {
         return (
-                <View
-                    style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-                >
+                <View>
+                    <Topbar options={props} />    
                     <Text>
                         I am Q&A Screen
                     </Text>
                 </View>
             );
-        }
 }

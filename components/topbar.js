@@ -73,7 +73,10 @@ export default function Topbar({options}) {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 width: screenWidth,
-                marginTop: 20
+                marginTop: 20,
+                backgroundColor: '#fff',
+                paddingLeft: 12,
+                paddingRight: 12
             }}
         >
             <Icon 

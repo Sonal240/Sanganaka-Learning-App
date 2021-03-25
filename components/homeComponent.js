@@ -5,6 +5,7 @@ import Profilescreen from './profileScreen';
 import Qscreen  from './qaScreen';
 import Chatscreen from './chatScreen';
 import Articles from './articleDisplay';
+import Contribute from './contributeComponent';
 
 import {
   createDrawerNavigator
@@ -48,7 +49,7 @@ const Drawer = createDrawerNavigator();
 
 export default function SimpleBottomNavigation(props) {
     const details = props.route.params;
-    console.log(details);
+    // console.log(details);
     const [value, setValue] = React.useState(0);
     const [userDetails, setDetails] = React.useState(details);
     function tryme(props) {
@@ -77,11 +78,12 @@ export default function SimpleBottomNavigation(props) {
     })
     return (
         <>
-            <Drawer.Navigator>
+            <Drawer.Navigator >
                 <Drawer.Screen name="Home" component={Tabs} />
-                <Drawer.Screen name="Profile" component={Homescreen} />
-                <Drawer.Screen name="Q&A" component={Homescreen} />
-                <Drawer.Screen name="Contribute" component={Homescreen} />
+                <Drawer.Screen name="Profile" component={Tabs} />
+                <Drawer.Screen name="Q&A" component={Tabs} />
+                <Drawer.Screen name="Chat" component={Tabs} />
+                <Drawer.Screen name="Contribute" component={Contribute} />
                 <Drawer.Screen name="Contact Us" component={Homescreen} />
                 <Drawer.Screen name="Logout" component={Homescreen} />
             </Drawer.Navigator>

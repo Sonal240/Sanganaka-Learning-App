@@ -9,13 +9,18 @@ import Contribute from './contributeComponent';
 
 import { Icon } from 'react-native-elements';
 
+import { View, Text } from 'react-native';
+
 
 
 const Tab = createBottomTabNavigator();
 
 export default function Tabs(props) {
+    const [name, setValue] = React.useState(props.route.name);
+    
     return(
         <Tab.Navigator
+            initialRouteName= {name}
             screenOptions={({ route })=> ({
                 tabBarIcon: ({focused, color, size}) => {
                     let iconName;
@@ -39,8 +44,36 @@ export default function Tabs(props) {
                     inactiveTintColor: 'gray',
                 }}
         >
-            <Tab.Screen name="Home"  component={Homescreen} />
-            <Tab.Screen name="Q&A"  component={Qscreen} />
+            <Tab.Screen name="Home"  component={Homescreen} 
+            options={{
+                    tabBarButton: () => {return(
+                        <Icon 
+                        type="ionicon"
+                        name={name==='Home'?'home':'home-outline'}
+                        color="white"
+                        containerStyle={{alignItems: 'center', width: '16%' }}
+                        iconStyle={{color: 'blue', marginTop: -10}}
+                        reverse 
+                        onPress= {()=>{props.navigation.navigate('Home')}}
+                        />
+                    )}
+                }}
+            />
+            <Tab.Screen name="Q&A"  component={Qscreen} 
+            options={{
+                    tabBarButton: () => {return(
+                        <Icon 
+                        type="ionicon"
+                        name={name==='Q&A'?'help-circle':'help-circle-outline'}
+                        color="#fff"
+                        containerStyle={{alignItems: 'center', width: '16%' }}
+                        iconStyle={{color: 'blue', marginTop: -10}}
+                        reverse 
+                        onPress= {()=>{props.navigation.navigate('Q&A')}}
+                        />
+                    )}
+                }}
+            />
             <Tab.Screen name="Contribute" component={Contribute}
                 options={{
                     tabBarButton: () => {return(
@@ -48,15 +81,43 @@ export default function Tabs(props) {
                         type="ant-design"
                         name="pluscircle"
                         color="blue"
-                        containerStyle={{alignItems: 'center', marginTop: -10}}
+                        containerStyle={{alignItems: 'center', marginTop: -10, width: '16%'}}
                         reverse 
                         onPress= {()=>{props.navigation.navigate('Contribute')}}
                         />
                     )}
                 }}
              />
-            <Tab.Screen name="Chat"  component={Chatscreen} />
-            <Tab.Screen name="Profile" component={Profilescreen} />
+            <Tab.Screen name="Chat"  component={Chatscreen} 
+            options={{
+                    tabBarButton: () => {return(
+                        <Icon 
+                        type="ionicon"
+                        name={name==='Chat'?'chatbox-ellipses-sharp':'chatbox-ellipses-outline'}
+                        color="#fff"
+                        containerStyle={{alignItems: 'center', width: '16%' }}
+                        iconStyle={{color: 'blue', marginTop: -10}}
+                        reverse 
+                        onPress= {()=>{props.navigation.navigate('Chat')}}
+                        />
+                    )}
+                }}
+            />
+            <Tab.Screen name="Profile" component={Profilescreen} 
+            options={{
+                    tabBarButton: () => {return(
+                        <Icon 
+                        type="ionicon"
+                        name={name==='Profile'?'person':'person-outline'}
+                        color="#fff"
+                        containerStyle={{alignItems: 'center', width: '16%' }}
+                        iconStyle={{color: 'blue', marginTop: -10}}
+                        reverse 
+                        onPress= {()=>{props.navigation.navigate('Profile')}}
+                        />
+                    )}
+                }}
+            />
         </Tab.Navigator>
     );
 }
