@@ -3,7 +3,7 @@ import { ScrollView, Text, Image, View, TouchableOpacity } from 'react-native';
 import Topbar from './topbar';
 import firebase from 'firebase';
 import { Loading } from './LoadingComponent';
-import { Card} from 'react-native-elements'
+import { Card} from 'react-native-elements';
 
 
 const arr = [
@@ -39,7 +39,7 @@ function ItemQuestion(props){
                             width: 50, 
                             height: 50
                         }}
-                        source={require('./images/user.png')}>
+                        source={{uri: props.photo}}>
                     </Card.Image>
                     <Card.FeaturedTitle style={{
                         color: '#999',
@@ -85,12 +85,15 @@ export default function Homescreen(props) {
     const preventDefault = (event) => event.preventDefault();
     let [articles, updateArt] = React.useState(null);
     let [articlesDisp, updateArt2] = React.useState(null);
+    let [questions, updateQues] = React.useState(null);
+    let [questionsDisp, updateQues2] = React.useState(null);
+    let [answers, updateAns] = React.useState(null);
+    let [answersDisp, updateAns2] = React.useState(null);
     const db = firebase.firestore();
-    var art=[];
-    var art2=[];
-    var i= 0;
     const fetchArticles = () => {
-        console.log('I ran')
+        var i = 0;
+        var art=[];
+        var art2=[];
         db.collection('articles').get().then((snapshot)=> {
             snapshot.docs.map((doc) => {
                 art.push(
@@ -134,9 +137,73 @@ export default function Homescreen(props) {
             console.log(err);
         })
     }
+    const fetchQuestions = () => {
+        var i=0;
+        var art=[];
+        var art2=[];
+        db.collection('questions').get().then((snapshot)=> {
+            snapshot.docs.map((doc) => {
+                art.push(
+                    {
+                        date: doc.data().date,
+                        mobile: doc.data().mobile,
+                        qid: doc.data().qid,
+                        question: doc.data().question
+                    }
+                )
+                if(i<10) {
+                    art2.push({
+                        date: doc.data().date,
+                        mobile: doc.data().mobile,
+                        qid: doc.data().qid,
+                        question: doc.data().question
+                    });
+                    i++;
+                }
+            })
+        })
+        .then(()=> {
+            updateQues(art);
+            updateQues2(art2);
+        })
+        .catch((err)=> {
+            console.log(err);
+        })
+    }
+    const fetchAnswers = () => {
+        var i=0;
+        var art=[];
+        var art2=[];
+        db.collection('answers').get().then((snapshot)=> {
+            snapshot.docs.map((doc) => {
+                art.push(
+                    {
+                        allAnswers: doc.data().username_and_answers,
+                        qid: doc.data().qid
+                    }
+                )
+                if(i<10) {
+                    art2.push({
+                        allAnswers: doc.data().username_and_answers,
+                        qid: doc.data().qid
+                    });
+                    i++;
+                }
+            })
+        })
+        .then(()=> {
+            updateAns(art);
+            updateAns2(art2);
+        })
+        .catch((err)=> {
+            console.log(err);
+        })
+    }
     React.useEffect(() => {
         if(!articles) {
             fetchArticles();
+            fetchQuestions();
+            fetchAnswers();
         }
     }, []); //replecating componentDidMount Behaviour
 
@@ -159,9 +226,19 @@ export default function Homescreen(props) {
                                 decelerationRate="normal"
 
                             >
-                                {arr.map((item)=> (
+                                {
+                                    questionsDisp!=null&&answers!=null?questionsDisp.map((item)=> 
+                                        answers.map((item2)=>
+                                        item2.qid===item.qid?
+                                        item2.allAnswers.map((item3)=>
+                                        item3.selected?(<ItemQuestion title={item.question} userName={item3.username} answer={item3.answer} photo={item3.photo} />):null
+                                        ):null
+                                        )
+                                    ):((<Loading />))
+                                /* {arr.map((item)=> (
                                     <ItemQuestion title={item.question} userName={item.answeredBy} answer={item.answer} />
-                                ))}
+                                ))} */
+                                }
                             </ScrollView>
                             <Text
                                 style={{
@@ -179,9 +256,9 @@ export default function Homescreen(props) {
 
                             >
                                 {
-                                articlesDisp!=null?articlesDisp.map((item)=> (
-                                    <ItemArticles article={item} />
-                                )):((<Loading />))
+                                    articlesDisp!=null?articlesDisp.map((item)=> (
+                                        <ItemArticles article={item} />
+                                    )):((<Loading />))
                                 }
                             </ScrollView>
                         </ScrollView>
