@@ -1,28 +1,10 @@
 import React from 'react';
-import { ScrollView, Text, Image, View, TouchableOpacity } from 'react-native';
+import { ScrollView, Text, Image, View, TouchableOpacity, RefreshControl } from 'react-native';
 import Topbar from './topbar';
 import firebase from 'firebase';
 import { Loading } from './LoadingComponent';
 import { Card} from 'react-native-elements';
-
-
-const arr = [
-    {
-        question: 'How To Use App?',
-        answeredBy: 'Some_Cool_Guy',
-        answer: 'Some random answer.'
-    },
-    {
-        question: 'How To Use App?',
-        answeredBy: 'Some_Cool_Guy',
-        answer: 'Some random answer.'
-    },
-    {
-        question: 'How To Use App?',
-        answeredBy: 'Some_Cool_Guy',
-        answer: 'Some random answer.'
-    }
-]
+import { Button } from 'react-native-paper';
 
 function ItemQuestion(props){
         return(
@@ -83,18 +65,16 @@ function ItemArticles(props){
 
 export default function Homescreen(props) {
     const preventDefault = (event) => event.preventDefault();
+
     let [articles, updateArt] = React.useState(null);
-    let [articlesDisp, updateArt2] = React.useState(null);
+    let [refreshing, setRefreshing] = React.useState(false);
     let [questions, updateQues] = React.useState(null);
-    let [questionsDisp, updateQues2] = React.useState(null);
     let [answers, updateAns] = React.useState(null);
-    let [answersDisp, updateAns2] = React.useState(null);
     const db = firebase.firestore();
     const fetchArticles = () => {
         var i = 0;
         var art=[];
-        var art2=[];
-        db.collection('articles').get().then((snapshot)=> {
+        db.collection('articles').orderBy('timestamp').limitToLast(10).get().then((snapshot)=> {
             snapshot.docs.map((doc) => {
                 art.push(
                     {
@@ -110,28 +90,10 @@ export default function Homescreen(props) {
                         videos: doc.data().videos
                     }
                 )
-                if(i<10) {
-                    art2.push({
-                        link: doc.data().article_link,
-                        category: doc.data().category,
-                        content: doc.data().content,
-                        credits: doc.data().credits,
-                        id: doc.data().id,
-                        images: doc.data().images,
-                        interest: doc.data().interest,
-                        sub: doc.data().subBy,
-                        topic: doc.data().topic,
-                        videos: doc.data().videos
-                    });
-                    i++;
-                }
             })
         })
         .then(()=> {
             updateArt(art);
-            updateArt2(art2);
-            console.log('reportHere')
-            console.log(articlesDisp)
         })
         .catch((err)=> {
             console.log(err);
@@ -140,8 +102,7 @@ export default function Homescreen(props) {
     const fetchQuestions = () => {
         var i=0;
         var art=[];
-        var art2=[];
-        db.collection('questions').get().then((snapshot)=> {
+        db.collection('questions').orderBy('date').limitToLast(10).get().then((snapshot)=> {
             snapshot.docs.map((doc) => {
                 art.push(
                     {
@@ -151,20 +112,10 @@ export default function Homescreen(props) {
                         question: doc.data().question
                     }
                 )
-                if(i<10) {
-                    art2.push({
-                        date: doc.data().date,
-                        mobile: doc.data().mobile,
-                        qid: doc.data().qid,
-                        question: doc.data().question
-                    });
-                    i++;
-                }
             })
         })
         .then(()=> {
             updateQues(art);
-            updateQues2(art2);
         })
         .catch((err)=> {
             console.log(err);
@@ -173,7 +124,6 @@ export default function Homescreen(props) {
     const fetchAnswers = () => {
         var i=0;
         var art=[];
-        var art2=[];
         db.collection('answers').get().then((snapshot)=> {
             snapshot.docs.map((doc) => {
                 art.push(
@@ -182,18 +132,10 @@ export default function Homescreen(props) {
                         qid: doc.data().qid
                     }
                 )
-                if(i<10) {
-                    art2.push({
-                        allAnswers: doc.data().username_and_answers,
-                        qid: doc.data().qid
-                    });
-                    i++;
-                }
             })
         })
         .then(()=> {
             updateAns(art);
-            updateAns2(art2);
         })
         .catch((err)=> {
             console.log(err);
@@ -207,10 +149,24 @@ export default function Homescreen(props) {
         }
     }, []); //replecating componentDidMount Behaviour
 
+    const onRefresh = async () => {
+        setRefreshing(true)
+        updateAns(null);
+        updateQues(null);
+        updateArt(null);
+        fetchArticles();
+        fetchQuestions();
+        await fetchAnswers();
+        setRefreshing(false);
+        
+    }
+
                 return (
                     <View>
                         <Topbar options={props} /> 
-                        <ScrollView>
+                        <ScrollView
+                            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+                        >
                             <Text
                                 style={{
                                     fontSize: 25,
@@ -219,6 +175,14 @@ export default function Homescreen(props) {
                             >
                                 Recent Questions
                             </Text>
+                            <Button
+                                style= {{
+                                    flexDirection: 'row-reverse',
+                                    marginTop: -30
+                                }}
+                            >
+                                View All
+                            </Button>
                             <ScrollView 
                                 horizontal= {true}
                                 showsHorizontalScrollIndicator={false}
@@ -227,7 +191,7 @@ export default function Homescreen(props) {
 
                             >
                                 {
-                                    questionsDisp!=null&&answers!=null?questionsDisp.map((item)=> 
+                                    questions!=null&&answers!=null?questions.map((item)=> 
                                         answers.map((item2)=>
                                         item2.qid===item.qid?
                                         item2.allAnswers.map((item3)=>
@@ -235,9 +199,6 @@ export default function Homescreen(props) {
                                         ):null
                                         )
                                     ):((<Loading />))
-                                /* {arr.map((item)=> (
-                                    <ItemQuestion title={item.question} userName={item.answeredBy} answer={item.answer} />
-                                ))} */
                                 }
                             </ScrollView>
                             <Text
@@ -248,6 +209,14 @@ export default function Homescreen(props) {
                             >
                                 Featured Articles
                             </Text>
+                            <Button
+                                style= {{
+                                    flexDirection: 'row-reverse',
+                                    marginTop: -30
+                                }}
+                            >
+                                View All
+                            </Button>
                             <ScrollView 
                                 horizontal= {true}
                                 showsHorizontalScrollIndicator={false}
@@ -256,7 +225,7 @@ export default function Homescreen(props) {
 
                             >
                                 {
-                                    articlesDisp!=null?articlesDisp.map((item)=> (
+                                    articles!=null?articles.map((item)=> (
                                         <ItemArticles article={item} />
                                     )):((<Loading />))
                                 }

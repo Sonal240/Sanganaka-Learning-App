@@ -76,10 +76,11 @@ export default function SimpleBottomNavigation(props) {
     props.navigation.addListener('beforeRemove', (e)=> {
         e.preventDefault();
     })
+    
     return (
         <>
             <Drawer.Navigator >
-                <Drawer.Screen name="Home" component={Tabs} />
+                <Drawer.Screen name="Home" component={(props)=> <Tabs {...props} info={details}/>} />
                 <Drawer.Screen name="Profile" component={Tabs} />
                 <Drawer.Screen name="Q&A" component={Tabs} />
                 <Drawer.Screen name="Chat" component={Tabs} />
