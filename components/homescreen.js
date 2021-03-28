@@ -40,8 +40,13 @@ function ItemQuestion(props){
     }
 
 function ItemArticles(props){
+    const details = {
+        article: props.article
+    }
         return(
-            <TouchableOpacity>
+            <TouchableOpacity
+                onPress={()=> props.props.navigation.navigate('article', details)}
+            >
                 <Card containerStyle={{width: 300}}>
                     <Card.Image
                         style= {{
@@ -78,14 +83,14 @@ export default function Homescreen(props) {
             snapshot.docs.map((doc) => {
                 art.push(
                     {
-                        link: doc.data().article_link,
+                        articles: doc.data().articles,
                         category: doc.data().category,
                         content: doc.data().content,
                         credits: doc.data().credits,
                         id: doc.data().id,
                         images: doc.data().images,
                         interest: doc.data().interest,
-                        sub: doc.data().subBy,
+                        subBy: doc.data().subBy,
                         topic: doc.data().topic,
                         videos: doc.data().videos
                     }
@@ -226,7 +231,7 @@ export default function Homescreen(props) {
                             >
                                 {
                                     articles!=null?articles.map((item)=> (
-                                        <ItemArticles article={item} />
+                                        <ItemArticles article={item} props={props} />
                                     )):((<Loading />))
                                 }
                             </ScrollView>

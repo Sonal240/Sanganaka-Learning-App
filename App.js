@@ -24,7 +24,11 @@ const config = {
   appId: "1:891657383270:web:8c5be227feed61ed8aeca7",
   measurementId: "G-VLFG4CWX78"
 };
-firebase.initializeApp(config);
+if (!firebase.apps.length) {
+   firebase.initializeApp(config);
+}else {
+   firebase.app(); // if already initialized, use that one
+}
 
 const Stack = createStackNavigator();
 
@@ -74,7 +78,7 @@ export default function App() {
           name="article"
           component={Article}
           options= {{
-            headerShown: false
+            title: 'View Article'
           }}
         />
         

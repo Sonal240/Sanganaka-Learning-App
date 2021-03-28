@@ -49,7 +49,7 @@ const Drawer = createDrawerNavigator();
 
 export default function SimpleBottomNavigation(props) {
     const details = props.route.params;
-    // console.log(details);
+    const getInfo = () => {return props.route.params}
     const [value, setValue] = React.useState(0);
     const [userDetails, setDetails] = React.useState(details);
     function tryme(props) {
@@ -80,9 +80,18 @@ export default function SimpleBottomNavigation(props) {
     return (
         <>
             <Drawer.Navigator >
-                <Drawer.Screen name="Home" component={(props)=> <Tabs {...props} info={details}/>} />
-                <Drawer.Screen name="Profile" component={Tabs} />
-                <Drawer.Screen name="Q&A" component={Tabs} />
+                <Drawer.Screen name="Home"
+                    component={Tabs} />
+                <Drawer.Screen name="Profile"
+                    initialParams={{ 
+                            info: props.route.params,
+                        }}
+                    component={Tabs} />
+                <Drawer.Screen name="Q&A" 
+                    initialParams={{ 
+                            info: props.route.params,
+                        }}
+                    component={Tabs} />
                 <Drawer.Screen name="Chat" component={Tabs} />
                 <Drawer.Screen name="Contribute" component={Contribute} />
                 <Drawer.Screen name="Contact Us" component={Homescreen} />
