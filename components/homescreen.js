@@ -1,15 +1,16 @@
 import React from 'react';
-import { ScrollView, Text, Image, View, TouchableOpacity, RefreshControl } from 'react-native';
+import { ScrollView, Text, View, TouchableOpacity, RefreshControl } from 'react-native';
 import Topbar from './topbar';
 import firebase from 'firebase';
 import { Loading } from './LoadingComponent';
-import { Card} from 'react-native-elements';
+import { Card } from 'react-native-elements';
 import { Button } from 'react-native-paper';
 
 function ItemQuestion(props){
+    var i = 1;
         return(
             <TouchableOpacity>
-                <Card containerStyle={{width: 300}}>
+                <Card key={i++} containerStyle={{width: 300}}>
                     <Card.Title>{props.title}</Card.Title>
                     <Card.Image 
                         containerStyle={{
@@ -28,7 +29,7 @@ function ItemQuestion(props){
                         fontSize: 10,
                         marginTop: -20,
                         marginLeft: 60
-                    }} key="1">
+                    }}>
                         Answered By:- {props.userName}
                     </Card.FeaturedTitle>
                     <Text style={{
@@ -43,24 +44,25 @@ function ItemArticles(props){
     const details = {
         article: props.article
     }
+    var i  = 1;
         return(
             <TouchableOpacity
                 onPress={()=> props.props.navigation.navigate('article', details)}
             >
-                <Card containerStyle={{width: 300}}>
+                <Card key={i++} containerStyle={{width: 300}}>
                     <Card.Image
                         style= {{
                             height: 180,
                             width: '100%',
                             resizeMode: 'contain'
                         }} 
-                        source={{uri: props.article.images[0]}}>
+                        source={props.article.images?{uri: props.article.images[0]}:require('./images/logo1.png')}>
                     </Card.Image>
                     <Card.FeaturedTitle style={{
                         color: 'blue',
                         fontSize: 20,
                         marginTop: 20
-                    }} key="1">
+                    }} >
                         {props.article.topic}
                     </Card.FeaturedTitle>
                 </Card>
@@ -79,7 +81,7 @@ export default function Homescreen(props) {
     const fetchArticles = () => {
         var i = 0;
         var art=[];
-        db.collection('articles').orderBy('timestamp').limitToLast(10).get().then((snapshot)=> {
+        db.collection('articles').orderBy('timestamp', 'desc').limit(10).get().then((snapshot)=> {
             snapshot.docs.map((doc) => {
                 art.push(
                     {
@@ -212,13 +214,14 @@ export default function Homescreen(props) {
                                     marginTop: 25
                                 }}
                             >
-                                Featured Articles
+                                Latest Articles
                             </Text>
                             <Button
                                 style= {{
                                     flexDirection: 'row-reverse',
                                     marginTop: -30
                                 }}
+                                onPress={()=> props.navigation.navigate('articles')}
                             >
                                 View All
                             </Button>

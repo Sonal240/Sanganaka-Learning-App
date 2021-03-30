@@ -84,7 +84,7 @@ export default function articleDisp(props) {
                     }}
                 >
                     {
-                        params.images.length?params.images.map((item)=> 
+                        params.images?params.images.map((item)=> 
                         (
                         <TouchableOpacity>
                             <Card containerStyle={{width: 300}}>
