@@ -17,10 +17,12 @@ const Tab = createBottomTabNavigator();
 
 export default function Tabs(props) {
     const [name, setValue] = React.useState(props.route.name);
+    var info = props.route.params.info;
+    console.log(name)
     
     return(
         <Tab.Navigator
-            initialRouteName= {name}
+            initialRouteName= {name+'2'}
             screenOptions={({ route })=> ({
                 tabBarIcon: ({focused, color, size}) => {
                     let iconName;
@@ -44,7 +46,7 @@ export default function Tabs(props) {
                     inactiveTintColor: 'gray',
                 }}
         >
-            <Tab.Screen name="Home"  component={Homescreen} 
+            <Tab.Screen name="Home2"  component={Homescreen} 
             options={{
                     tabBarButton: () => {return(
                         <Icon 
@@ -59,7 +61,7 @@ export default function Tabs(props) {
                     )}
                 }}
             />
-            <Tab.Screen name="Q&A"  component={Qscreen} 
+            <Tab.Screen name="Q&A2"  component={Qscreen} 
             options={{
                     tabBarButton: () => {return(
                         <Icon 
@@ -74,7 +76,7 @@ export default function Tabs(props) {
                     )}
                 }}
             />
-            <Tab.Screen name="Contribute" component={Contribute}
+            <Tab.Screen name="Contribute2" component={Contribute}
                 options={{
                     tabBarButton: () => {return(
                         <Icon 
@@ -88,7 +90,7 @@ export default function Tabs(props) {
                     )}
                 }}
              />
-            <Tab.Screen name="Chat"  component={Chatscreen} 
+            <Tab.Screen name="Chat2"  component={Chatscreen} 
             options={{
                     tabBarButton: () => {return(
                         <Icon 
@@ -103,7 +105,8 @@ export default function Tabs(props) {
                     )}
                 }}
             />
-            <Tab.Screen name="Profile" component={Profilescreen} 
+            <Tab.Screen name="Profile2" component={Profilescreen} 
+            initialParams= {info}
             options={{
                     tabBarButton: () => {return(
                         <Icon 
@@ -113,7 +116,9 @@ export default function Tabs(props) {
                         containerStyle={{alignItems: 'center', width: '16%' }}
                         iconStyle={{color: 'blue', marginTop: -10}}
                         reverse 
-                        onPress= {()=>{props.navigation.navigate('Profile')}}
+                        onPress= {()=>{
+                            props.navigation.navigate('Profile')
+                        }}
                         />
                     )}
                 }}

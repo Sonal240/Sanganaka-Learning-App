@@ -49,29 +49,28 @@ const Drawer = createDrawerNavigator();
 
 export default function SimpleBottomNavigation(props) {
     const details = props.route.params;
-    const getInfo = () => {return props.route.params}
-    const [value, setValue] = React.useState(0);
     const [userDetails, setDetails] = React.useState(details);
-    function tryme(props) {
-        setScreen(<Articles info= {props} />)
-    }
-    let [currentScreen, setScreen] = React.useState(<Homescreen setScreenChild={tryme} navigation={props.navigation}/>);
-    function displaySceen(val) {
-        switch (val) {
-            case 0:
-                currentScreen = setScreen(<Homescreen setScreenChild={tryme} navigation={props.navigation} />)
-                break;
-            case 1:
-                currentScreen = setScreen(<Qscreen />)
-                break;
-            case 4:
-                currentScreen = setScreen(<Chatscreen />)
-                break;
-            case 5:
-                currentScreen = setScreen(<Profilescreen details={userDetails} set={setDetails} />)
-                break;
-        }
-    }
+    // const [value, setValue] = React.useState(0);
+    // function tryme(props) {
+    //     setScreen(<Articles info= {props} />)
+    // }
+    // let [currentScreen, setScreen] = React.useState(<Homescreen setScreenChild={tryme} navigation={props.navigation}/>);
+    // function displaySceen(val) {
+    //     switch (val) {
+    //         case 0:
+    //             currentScreen = setScreen(<Homescreen setScreenChild={tryme} navigation={props.navigation} />)
+    //             break;
+    //         case 1:
+    //             currentScreen = setScreen(<Qscreen />)
+    //             break;
+    //         case 4:
+    //             currentScreen = setScreen(<Chatscreen />)
+    //             break;
+    //         case 5:
+    //             currentScreen = setScreen(<Profilescreen details={userDetails} set={setDetails} />)
+    //             break;
+    //     }
+    // }
 
     props.navigation.addListener('beforeRemove', (e)=> {
         e.preventDefault();
@@ -81,6 +80,9 @@ export default function SimpleBottomNavigation(props) {
         <>
             <Drawer.Navigator >
                 <Drawer.Screen name="Home"
+                initialParams={{ 
+                            info: props.route.params,
+                        }}
                     component={Tabs} />
                 <Drawer.Screen name="Profile"
                     initialParams={{ 
@@ -92,9 +94,21 @@ export default function SimpleBottomNavigation(props) {
                             info: props.route.params,
                         }}
                     component={Tabs} />
-                <Drawer.Screen name="Chat" component={Tabs} />
-                <Drawer.Screen name="Contribute" component={Contribute} />
-                <Drawer.Screen name="Contact Us" component={Homescreen} />
+                <Drawer.Screen name="Chat"
+                    initialParams={{ 
+                            info: props.route.params,
+                        }}
+                    component={Tabs} />
+                <Drawer.Screen name="Contribute" 
+                    initialParams={{ 
+                            info: props.route.params,
+                        }}
+                    component={Contribute} />
+                <Drawer.Screen name="Contact Us" 
+                    initialParams={{ 
+                            info: props.route.params,
+                        }}
+                    component={Homescreen} />
                 <Drawer.Screen name="Logout" component={Homescreen} />
             </Drawer.Navigator>
             

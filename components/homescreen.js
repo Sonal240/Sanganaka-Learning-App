@@ -187,6 +187,7 @@ export default function Homescreen(props) {
                                     flexDirection: 'row-reverse',
                                     marginTop: -30
                                 }}
+                                onPress= {()=>{props.navigation.navigate('Q&A')}}
                             >
                                 View All
                             </Button>

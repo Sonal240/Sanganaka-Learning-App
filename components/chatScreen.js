@@ -10,7 +10,7 @@ export default class Homescreen extends React.Component {
                     style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
                 >
                     <Text>
-                        I am chatScreen
+                        This feature is Under Development....
                     </Text>
                 </View>
             );

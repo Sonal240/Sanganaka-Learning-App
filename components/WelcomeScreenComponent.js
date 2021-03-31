@@ -42,6 +42,32 @@ const screenWidth = Math.round(Dimensions.get('window').width);
 
      return(
         <View style={styles.container}>
+            <View
+                style={{
+                    backgroundColor: '#44b',
+                    marginTop: 40,
+                    height: 40,
+                    width: '100%',
+                    justifyContent: 'center',
+                    alignContent: 'center',
+                }}
+            >
+                <Text style={{
+                    display:props.route.params?props.route.params.isRecentSigned?'flex':'none':'none',
+                    backgroundColor: '#44b',
+                    color: '#fff',
+                    textAlign: 'center'
+                }}>
+                    Your account has been Created please login again!!!
+                </Text>
+                <Text style={{
+                    display:props.route.params?props.route.params.isRecentSigned?'none':'flex':'none',
+                    backgroundColor: '#44b',
+                    color: '#fff'
+                }}>
+                    Changes in account have been made please sign in to continue...
+                </Text>
+            </View>
             <ScrollView 
                 horizontal= {true}
                 contentContainerStyle={{ width: `${100 * 3}%` }}
