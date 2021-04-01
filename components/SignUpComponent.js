@@ -40,7 +40,7 @@ export default function SignUp(props) {
     }
 
     setPic({ localUri: pickerResult.uri });
-    const response = await fetch(photo.localUri);
+    const response = await fetch(pickerResult.uri);
     const blob = await response.blob();
     var reader = new FileReader();
     reader.readAsDataURL(blob); 
