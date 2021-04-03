@@ -75,7 +75,9 @@ export default function SignUp(props) {
       db.collection("users").add({
                 photo: b64,
                 lol: levelOfLearning,
-                phno: user.phoneNumber
+                phno: user.phoneNumber,
+                name: name,
+                email: email
             })
     )
     .then(()=> {

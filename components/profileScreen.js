@@ -100,7 +100,9 @@ export default function Profile(props) {
                 dob: dob,
                 photo: photo,
                 lol: lol,
-                gender: gender
+                gender: gender,
+                name: name,
+                email: email
             }
             user.updateProfile({
                 displayName: name

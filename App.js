@@ -9,6 +9,7 @@ import LogInScreen from './components/LoginPhoneNumber';
 import Article from './components/articleDisplay';
 import Signup from './components/SignUpComponent';
 import ArticleList from './components/cardList';
+import Question from './components/questionDisp';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as firebase from 'firebase';
 
@@ -80,6 +81,13 @@ export default function App() {
           component={Article}
           options= {{
             title: 'View Article'
+          }}
+        />
+        <Stack.Screen
+          name="question"
+          component={Question}
+          options= {{
+            title: 'View Question'
           }}
         />
         <Stack.Screen

@@ -4,7 +4,6 @@ import firebase from 'firebase';
 import { ScrollView, Text, TouchableOpacity, RefreshControl } from 'react-native';
 import { Loading } from './LoadingComponent';
 import { Image } from 'react-native';
-import { Alert } from 'react-native';
 import { View } from 'react-native';
 
 var i=1;
