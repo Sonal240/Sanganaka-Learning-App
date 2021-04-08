@@ -62,6 +62,7 @@ export default function Tabs(props) {
                 }}
             />
             <Tab.Screen name="Q&A2"  component={Qscreen} 
+            initialParams= {info}
             options={{
                     tabBarButton: () => {return(
                         <Icon 

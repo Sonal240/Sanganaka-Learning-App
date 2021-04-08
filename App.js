@@ -12,6 +12,7 @@ import ArticleList from './components/cardList';
 import Question from './components/questionDisp';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as firebase from 'firebase';
+import ProfileShow from './components/userDisp';
 
 
 
@@ -88,6 +89,13 @@ export default function App() {
           component={Question}
           options= {{
             title: 'View Question'
+          }}
+        />
+        <Stack.Screen
+          name="userDisp"
+          component={ProfileShow}
+          options= {{
+            title: 'View User'
           }}
         />
         <Stack.Screen

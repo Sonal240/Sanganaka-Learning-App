@@ -1,8 +1,7 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { View, Text, Image, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 
-import { Card, ListItem, Icon } from 'react-native-elements';
+import { Card, ListItem } from 'react-native-elements';
 import firebase from 'firebase';
 import { Loading } from './LoadingComponent';
 

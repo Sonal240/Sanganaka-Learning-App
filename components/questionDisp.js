@@ -8,6 +8,7 @@ import { Loading } from './LoadingComponent';
 export default function questionDisp(props) {
     const db = firebase.firestore();
     const ques= props.route.params.ques;
+    const navigate = props.navigation.navigate;
     let [answers, updateAns] = React.useState(null);
     let [fetched, updateFetch] = React.useState(false);
 
@@ -25,7 +26,7 @@ export default function questionDisp(props) {
                             dob: snapshot.docs[0].data().dob,
                             email: snapshot.docs[0].data().email,
                             name: snapshot.docs[0].data().name,
-                            phno: snapshot.docs[0].data().phno,
+                            mobile: snapshot.docs[0].data().phno,
                             photo: snapshot.docs[0].data().photo,
                             gender: snapshot.docs[0].data().gender,
                             lol: snapshot.docs[0].data().lol
@@ -34,13 +35,21 @@ export default function questionDisp(props) {
                     .catch(err=> {
                         console.log(err)
                     })
-                    main.push({
-                        userInfo: user,
-                        answer: data.answer
-                    })
-                    updateAns({
-                        answers: main
-                    })
+                    if(data.selected) {
+                        var temp = main[0];
+                        main[0] = {
+                            userInfo: user,
+                            answer: data.answer
+                        };
+                        temp?main.push(temp):null;
+                    }
+                    else {
+                        main.push({
+                            userInfo: user,
+                            answer: data.answer
+                        })
+                    }
+                    updateAns(main)
                 })
             })
             .then(()=> {
@@ -63,26 +72,60 @@ export default function questionDisp(props) {
 
         if(answers) {
             return (
-                <View
-                    style={{
-                        marginTop: 20,
-                        backgroundColor: '#fff',
-                        paddingTop: 10,
-                        paddingLeft: 20,
-                        paddingRight: 10,
-                        paddingBottom: 10
-                    }}
-                >
-                    <Text
-                        style={{
-                            fontSize: 16,
-                            color: '#555'
-                        }}
-                        onPress={handlePress}
-                    >
-                        Some Answer
-                    </Text>
-                </View>
+                <ScrollView>
+                    {
+                        answers.map(item=> (
+                            <View
+                                style={{
+                                    marginTop: 20,
+                                    backgroundColor: '#fff',
+                                    paddingTop: 10,
+                                    paddingLeft: 20,
+                                    paddingRight: 10,
+                                    paddingBottom: 10
+                                }}
+                            >
+                                <TouchableOpacity
+                                    onPress={()=> {
+                                        info = item.userInfo;
+                                        navigate('userDisp', info);
+                                    }}
+                                >
+                                    <Image 
+                                            source={
+                                                item.userInfo.photo?
+                                                {uri: item.userInfo.photo}:
+                                                require('./images/user.png')
+                                            }
+                                            style={{
+                                                height: 50,
+                                                width: 50
+                                            }} 
+                                        />
+                                    <Text
+                                        style={{
+                                            color: '#999',
+                                            marginTop: -30,
+                                            marginLeft: 60
+                                        }}
+                                    >
+                                        Submited By: - {item.userInfo.name}
+                                    </Text>
+                                </TouchableOpacity>
+                                <Text
+                                    style={{
+                                        fontSize: 16,
+                                        marginTop: 20,
+                                        color: '#555'
+                                    }}
+                                    onPress={handlePress}
+                                >
+                                    {item.answer}
+                                </Text>
+                            </View>
+                        ))
+                    }
+                </ScrollView>
             )
         }
         else if(fetched){
@@ -116,7 +159,12 @@ export default function questionDisp(props) {
                     paddingRight: 20
                 }}
             >
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={()=> {
+                                info = ques.user;
+                                navigate('userDisp', info);
+                            }}
+                >
                     <Image 
                             source={
                                 ques.user.photo?

@@ -9,7 +9,14 @@ import { Button } from 'react-native-paper';
 function ItemQuestion(props){
     var i = 1;
         return(
-            <TouchableOpacity>
+            <TouchableOpacity
+                onPress={()=> {
+                    var details = {
+                        ques: props.all
+                    }
+                    props.propsc.navigation.navigate('question', details)
+                }}
+            >
                 <Card key={i++} containerStyle={{width: 300}}>
                     <Card.Title>{props.title}</Card.Title>
                     <Card.Image 
@@ -109,16 +116,57 @@ export default function Homescreen(props) {
     const fetchQuestions = () => {
         var i=0;
         var art=[];
+        var art2=[];
+        var arr = [];
         db.collection('questions').orderBy('date').limitToLast(10).get().then((snapshot)=> {
             snapshot.docs.map((doc) => {
-                art.push(
-                    {
-                        date: doc.data().date,
-                        mobile: doc.data().mobile,
-                        qid: doc.data().qid,
-                        question: doc.data().question
-                    }
-                )
+                db.collection('users').where('phno', '==', doc.data().mobile).get().then((snapshot)=> {
+                    art.push(
+                        {
+                            question: doc.data().question,
+                            qid: doc.data().qid,
+                            mobile: doc.data().mobile,
+                            user: {
+                                photo: snapshot.docs[0].data().photo,
+                                mobile: doc.data().mobile,
+                                dob: snapshot.docs[0].data().dob?new Date(snapshot.docs[0].data().dob.seconds * 1000):null,
+                                lol: snapshot.docs[0].data().lol,
+                                gender: snapshot.docs[0].data().gender,
+                                name: snapshot.docs[0].data().name,
+                                email: snapshot.docs[0].data().email
+                            }
+                        }
+                    )
+                })
+                .catch((err)=> {
+                    console.log(err)
+                })
+                db.collection('answers').where('qid', '==', doc.data().qid).get().then((snapshot)=> {
+                    snapshot.docs[0].data().username_and_answers.map((data)=> {
+                            db.collection('users').where('phno', '==', data.mobile).get().then(async (snapshot2)=> {
+                                await arr.push({
+                                            answer: data.answer,
+                                            selected: data.selected,
+                                            dob: snapshot2.docs[0].data().dob,
+                                            mobile: snapshot2.docs[0].data().phno,
+                                            photo: snapshot2.docs[0].data().photo,
+                                            username: snapshot2.docs[0].data().name,
+                                            email: snapshot2.docs[0].data().email,
+                                            lol: snapshot2.docs[0].data().lol,
+                                            gender: snapshot2.docs[0].data().gender
+                                        })
+                                await art2.push(
+                                    {
+                                        qid: snapshot.docs[0].data().qid,
+                                        allAnswers: arr
+                                    }
+                                )
+                                console.log(art2);
+                                updateAns(art2);
+                            })
+                        })
+                })
+                .catch(err=> {console.log(err)})
             })
         })
         .then(()=> {
@@ -128,31 +176,30 @@ export default function Homescreen(props) {
             console.log(err);
         })
     }
-    const fetchAnswers = () => {
-        var i=0;
-        var art=[];
-        db.collection('answers').get().then((snapshot)=> {
-            snapshot.docs.map((doc) => {
-                art.push(
-                    {
-                        allAnswers: doc.data().username_and_answers,
-                        qid: doc.data().qid
-                    }
-                )
-            })
-        })
-        .then(()=> {
-            updateAns(art);
-        })
-        .catch((err)=> {
-            console.log(err);
-        })
-    }
+    // const fetchAnswers = () => {
+    //     var i=0;
+    //     var art=[];
+    //     db.collection('answers').where('qid', '==', item).get().then((snapshot)=> {
+    //         snapshot.docs.map((doc) => {
+    //             art.push(
+    //                 {
+    //                     allAnswers: doc.data().username_and_answers,
+    //                     qid: doc.data().qid
+    //                 }
+    //             )
+    //         })
+    //     })
+    //     .then(()=> {
+    //         updateAns(art);
+    //     })
+    //     .catch((err)=> {
+    //         console.log(err);
+    //     })
+    // }
     React.useEffect(() => {
         if(!articles) {
             fetchArticles();
             fetchQuestions();
-            fetchAnswers();
         }
     }, []); //replecating componentDidMount Behaviour
 
@@ -162,8 +209,7 @@ export default function Homescreen(props) {
         updateQues(null);
         updateArt(null);
         fetchArticles();
-        fetchQuestions();
-        await fetchAnswers();
+        await fetchQuestions();
         setRefreshing(false);
         
     }
@@ -203,7 +249,7 @@ export default function Homescreen(props) {
                                         answers.map((item2)=>
                                         item2.qid===item.qid?
                                         item2.allAnswers.map((item3)=>
-                                        item3.selected?(<ItemQuestion title={item.question} userName={item3.username} answer={item3.answer} photo={item3.photo} />):null
+                                        item3.selected?(<ItemQuestion all={item} propsc={props} title={item.question} userName={item3.username} answer={item3.answer} photo={item3.photo} />):(<ItemQuestion title={item.question} userName={'No one'} answer={'No answers selected as correct yet'} photo={null} />)
                                         ):null
                                         )
                                     ):((<Loading />))
