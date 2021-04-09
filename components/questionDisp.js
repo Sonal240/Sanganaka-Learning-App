@@ -1,6 +1,5 @@
 import React from 'react';
-import { ScrollView, Text, Alert, View, Linking, TouchableOpacity, Image } from 'react-native';
-import { Card } from 'react-native-elements';
+import { ScrollView, Text, View, TouchableOpacity, Image } from 'react-native';
 import firebase from 'firebase';
 import { Loading } from './LoadingComponent';
 

@@ -20,7 +20,7 @@ export default function MyTabs(props) {
         >
         <Tab.Screen name="Questions" initialParams= {info} component={AllQuestions} />
         <Tab.Screen name="My Questions" initialParams= {info} component={MyQuestions} />
-        <Tab.Screen name="My Answers" initialParams= {info} component={MyAnswers} />
+        <Tab.Screen name="Questions Answered" initialParams= {info} component={MyAnswers} />
         </Tab.Navigator>
     </>
   );

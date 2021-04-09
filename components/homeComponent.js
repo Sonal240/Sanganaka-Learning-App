@@ -1,10 +1,6 @@
 import React from 'react';
 // import { Dimensions } from "react-native";
 import Homescreen from './homescreen';
-import Profilescreen from './profileScreen';
-import Qscreen  from './qaScreen';
-import Chatscreen from './chatScreen';
-import Articles from './articleDisplay';
 import Contribute from './contributeComponent';
 
 import {
@@ -12,6 +8,7 @@ import {
 } from '@react-navigation/drawer';
 
 import Tabs from './tabComponent';
+import LogOut from './logout';
 
 
 
@@ -112,7 +109,8 @@ export default function SimpleBottomNavigation(props) {
                             info: props.route.params,
                         }}
                     component={Homescreen} />
-                <Drawer.Screen name="Logout" component={Homescreen} />
+                <Drawer.Screen name="Logout" 
+                    component={LogOut} />
             </Drawer.Navigator>
             
 
