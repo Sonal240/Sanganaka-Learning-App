@@ -47,6 +47,7 @@ export default function Tabs(props) {
                 }}
         >
             <Tab.Screen name="Home2"  component={Homescreen} 
+            initialParams= {info}
             options={{
                     tabBarButton: () => {return(
                         <Icon 

@@ -79,7 +79,13 @@ function ItemArticles(props){
 
 export default function Homescreen(props) {
     const preventDefault = (event) => event.preventDefault();
-
+    let [message, updateMess] = React.useState(props.route.params?props.route.params.message:null);
+    console.log('WATCH MEEEEE')
+    console.log(props.route.params)
+    if(message) {
+        alert(message);
+        updateMess(null)
+    }
     let [articles, updateArt] = React.useState(null);
     let [refreshing, setRefreshing] = React.useState(false);
     let [questions, updateQues] = React.useState(null);
@@ -118,7 +124,7 @@ export default function Homescreen(props) {
         var art=[];
         var art2=[];
         var arr = [];
-        db.collection('questions').orderBy('date').limitToLast(10).get().then((snapshot)=> {
+        db.collection('questions').orderBy('date').limit(5).get().then((snapshot)=> {
             snapshot.docs.map((doc) => {
                 db.collection('users').where('phno', '==', doc.data().mobile).get().then((snapshot)=> {
                     art.push(

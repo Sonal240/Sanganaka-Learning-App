@@ -4,6 +4,7 @@ import { View, Text, Image, ScrollView, TouchableOpacity, RefreshControl } from 
 import { Card, ListItem } from 'react-native-elements';
 import firebase from 'firebase';
 import { Loading } from './LoadingComponent';
+import { Button } from 'react-native';
 
 
 var i=1;
@@ -65,34 +66,34 @@ export default function AllQuestions(props) {
     
     const fetchquestions = () => {
         var art=[];
-        db.collection('questions').orderBy('date', 'desc').limit(20).get().then((snapshot)=> {
-            snapshot.docs.map((doc) => {
-                db.collection('users').where('phno', '==', doc.data().mobile).get().then((snapshot)=> {
-                    art.push(
-                        {
-                            question: doc.data().question,
-                            qid: doc.data().qid,
-                            mobile: doc.data().mobile,
-                            user: {
-                                photo: snapshot.docs[0].data().photo,
+        db.collection('questions').orderBy('date', 'desc').limit(20).get().then(async (snapshot)=> {
+            if(snapshot.docs.length) {
+                art = await Promise.all(snapshot.docs.map(async (doc) => {
+                    await db.collection('users').where('phno', '==', doc.data().mobile).get().then((snapshot)=> {
+                        art={
+                                question: doc.data().question,
+                                qid: doc.data().qid,
                                 mobile: doc.data().mobile,
-                                dob: snapshot.docs[0].data().dob?new Date(snapshot.docs[0].data().dob.seconds * 1000):null,
-                                lol: snapshot.docs[0].data().lol,
-                                gender: snapshot.docs[0].data().gender,
-                                name: snapshot.docs[0].data().name,
-                                email: snapshot.docs[0].data().email
+                                user: {
+                                    photo: snapshot.docs[0].data().photo,
+                                    mobile: doc.data().mobile,
+                                    dob: snapshot.docs[0].data().dob?new Date(snapshot.docs[0].data().dob.seconds * 1000):null,
+                                    lol: snapshot.docs[0].data().lol,
+                                    gender: snapshot.docs[0].data().gender,
+                                    name: snapshot.docs[0].data().name,
+                                    email: snapshot.docs[0].data().email
+                                }
                             }
-                        }
-                    )
-                })
-                .then(()=> {
-                    updateItems(40);
-                    updateArt(art);
-                })
-                .catch((err)=> {
-                    console.log(err);
-                })
-            })
+                    })
+                    .catch((err)=> {
+                        console.log(err);
+                    })
+                    return art;
+                }))
+            }
+        })
+        .then (()=> {
+            updateArt(art)
         })
         .catch((err)=> {
             console.log(err);
@@ -104,35 +105,37 @@ export default function AllQuestions(props) {
             updateItems(items+20);
             console.log(items);
             var art=[];
-            db.collection('questions').orderBy('timestamp', 'desc').limit(items).get().then((snapshot)=> {
-                snapshot.docs.map((doc) => {
-                    db.collection('users').where('phno', '==', doc.data().mobile).get().then((snapshot)=> {
-                        art.push(
-                            {
-                                question: doc.data().question,
-                                qid: doc.data().qid,
-                                mobile: doc.data().mobile,
-                                user: {
-                                    photo: snapshot.docs[0].data().photo,
+            db.collection('questions').orderBy('timestamp', 'desc').limit(items).get().then(async (snapshot)=> {
+                if(snapshot.docs.length) {
+                    art = await Promise.all(snapshot.docs.map(async (doc) => {
+                        await db.collection('users').where('phno', '==', doc.data().mobile).get().then((snapshot)=> {
+                            art = {
+                                    question: doc.data().question,
+                                    qid: doc.data().qid,
                                     mobile: doc.data().mobile,
-                                    dob: snapshot.docs[0].data().dob?new Date(snapshot.docs[0].data().dob.seconds * 1000):null,
-                                    lol: snapshot.docs[0].data().lol,
-                                    gender: snapshot.docs[0].data().gender
+                                    user: {
+                                        photo: snapshot.docs[0].data().photo,
+                                        mobile: doc.data().mobile,
+                                        dob: snapshot.docs[0].data().dob?new Date(snapshot.docs[0].data().dob.seconds * 1000):null,
+                                        lol: snapshot.docs[0].data().lol,
+                                        gender: snapshot.docs[0].data().gender
+                                    }
                                 }
-                            }
-                        )
-                    })
-                    .then(()=> {
-                        updateArt(art);
-                        setLoading(false);
-                        if(art.length< items) {
-                            setEnd(true);
-                        }
-                    })
-                    .catch((err)=> {
-                        console.log(err);
-                    })
-                })
+                            
+                        })
+                        .catch((err)=> {
+                            console.log(err);
+                        })
+                        return art;
+                    }))
+                }
+            })
+            .then(()=> {
+                updateArt(art);
+                setLoading(false);
+                if(art.length< items) {
+                    setEnd(true);
+                }
             })
             .catch((err)=> {
                 console.log(err);
@@ -147,6 +150,19 @@ export default function AllQuestions(props) {
 
     return(
         <>
+            <View
+                style={{
+                    width: '100%',
+                    alignItems: 'center',
+                    marginTop: 20
+                }}
+            >
+                <Button
+                    title= "Add A New Question"
+                    onPress={()=> props.navigation.navigate('questionAdd', props.route.params)}
+
+                />
+            </View>
             <ScrollView
                 onScroll={({nativeEvent}) => {
                     if (isCloseToBottom(nativeEvent)) {
@@ -157,7 +173,7 @@ export default function AllQuestions(props) {
             >
                 <Card containerStyle={{padding: 0}} >
                     {
-                        questions?questions.map((item) => <DisplayList question={item} propsc={props} />):<Loading />
+                        questions?questions.length?questions.map((item) => <DisplayList question={item} propsc={props} />):<Text>No Questions Yet...</Text>:<Loading />
                     }
                 </Card>
                 <View

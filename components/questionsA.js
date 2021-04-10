@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
+import { Image, ScrollView, TouchableOpacity, RefreshControl, Text } from 'react-native';
 
 import { Card, ListItem } from 'react-native-elements';
 import firebase from 'firebase';
@@ -60,35 +60,34 @@ export default function AllQuestions(props) {
     
     const fetchquestions = () => {
         var art=[];
-        db.collection('users').where('phno', '==', props.route.params.phno).get().then((snapshot0)=> {
-            snapshot0.docs[0].data().answered?snapshot0.docs[0].data().answered.map((item)=> {
-                db.collection('questions').where('qid', '==', item).get().then(async (snapshot)=> {
-                    await art.push(
-                                {
-                                    question: snapshot.docs[0].data().question,
-                                    qid: snapshot.docs[0].data().qid,
-                                    mobile: snapshot.docs[0].data().mobile,
-                                    user: {
-                                        photo: snapshot0.docs[0].data().photo,
-                                        mobile: snapshot.docs[0].data().mobile,
-                                        dob: snapshot0.docs[0].data().dob?new Date(snapshot0.docs[0].data().dob.seconds * 1000):null,
-                                        lol: snapshot0.docs[0].data().lol,
-                                        gender: snapshot0.docs[0].data().gender,
-                                        name: snapshot0.docs[0].data().name,
-                                        email: snapshot0.docs[0].data().email
-                                    }
-                                }
-                            )
+        db.collection('users').where('phno', '==', props.route.params.phno).get().then(async (snapshot0)=> {
+            snapshot0.docs[0].data().answered?art= await Promise.all(snapshot0.docs[0].data().answered.map(async (item)=> {
+                await db.collection('questions').where('qid', '==', item).get().then((snapshot)=> {
+                        art={
+                            question: snapshot.docs[0].data().question,
+                            qid: snapshot.docs[0].data().qid,
+                            mobile: snapshot.docs[0].data().mobile,
+                            user: {
+                                photo: snapshot0.docs[0].data().photo,
+                                mobile: snapshot.docs[0].data().mobile,
+                                dob: snapshot0.docs[0].data().dob?new Date(snapshot0.docs[0].data().dob.seconds * 1000):null,
+                                lol: snapshot0.docs[0].data().lol,
+                                gender: snapshot0.docs[0].data().gender,
+                                name: snapshot0.docs[0].data().name,
+                                email: snapshot0.docs[0].data().email
+                            }
+                        }
                 })
-                .then(()=> {
-                        updateArt(art);
-                    }
-                )
                 .catch((err)=> {
                     console.log(err);
                 })
-            }):updateArt(null)
+                return art;
+            })):null;
         })
+        .then(()=> {
+                updateArt(art);
+            }
+        )
         .catch((err)=> {
             console.log(err)
         })
@@ -101,7 +100,7 @@ export default function AllQuestions(props) {
             >
                 <Card containerStyle={{padding: 0}} >
                     {
-                        questions?questions.map((item) => <DisplayList question={item} propsc={props} />):<Loading />
+                        questions?questions.length?questions.map((item) => <DisplayList question={item} propsc={props} />):(<Text>No answers found</Text>):<Loading />
                     }
                 </Card>
             </ScrollView>

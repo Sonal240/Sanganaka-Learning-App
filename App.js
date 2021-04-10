@@ -13,6 +13,7 @@ import Question from './components/questionDisp';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as firebase from 'firebase';
 import ProfileShow from './components/userDisp';
+import AddQuestion from './components/addQuestion';
 
 
 
@@ -103,6 +104,13 @@ export default function App() {
           component={ArticleList}
           options= {{
             title: 'View Articles'
+          }}
+        />
+        <Stack.Screen
+          name="questionAdd"
+          component={AddQuestion}
+          options= {{
+            title: 'Add a Question'
           }}
         />
         
