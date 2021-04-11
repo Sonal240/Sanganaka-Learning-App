@@ -19,7 +19,7 @@ export default function questionDisp(props) {
             };
             var main= [];
             await db.collection('answers').where('qid', '==', props.ques.qid).get().then(async (snapshot)=> {
-                await snapshot.docs[0].data().username_and_answers.map(async (data)=> {
+                main = snapshot.docs[0]?await Promise.all(snapshot.docs[0].data().username_and_answers.map(async (data)=> {
                     await db.collection('users').where('phno', '==', data.mobile).get().then((snapshot)=> {
                         user= {
                             dob: snapshot.docs[0].data().dob,
@@ -34,25 +34,32 @@ export default function questionDisp(props) {
                     .catch(err=> {
                         console.log(err)
                     })
-                    if(data.selected) {
-                        var temp = main[0];
-                        main[0] = {
-                            userInfo: user,
-                            answer: data.answer
-                        };
-                        temp?main.push(temp):null;
+                    main = {
+                        userInfo: user,
+                        answer: data.answer,
+                        selected: data.selected
                     }
-                    else {
-                        main.push({
-                            userInfo: user,
-                            answer: data.answer
-                        })
+                    return main;
+                })):null;
+            })
+            .then(async ()=> {
+                if(main) {
+                    for(var i=0; i<main.length; i++) {
+                        if(main[i].selected) {
+                            var temp = main[0];
+                            main[0] = {
+                                userInfo: main[i].user,
+                                answer: main[i].answer,
+                                selected: main[i].selected
+                            };
+                            main[i]= temp;
+                        }
                     }
-                    updateAns(main)
-                })
+                }
             })
             .then(()=> {
-                    updateFetch(true)
+                    updateFetch(true);
+                    updateAns(main);
                 }
             )
             .catch((err)=> {
@@ -61,7 +68,7 @@ export default function questionDisp(props) {
         }
 
         React.useEffect(() => {
-            if(!answers) {
+            if(!answers && !fetched) {
                 fetchAnswers();
             }
         }, []); //replecating componentDidMount Behaviour

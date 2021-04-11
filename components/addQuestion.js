@@ -16,23 +16,20 @@ export default function AddQuestion(props) {
 
     const submit = () => {
         if(question) {
-            // db.collection("questions").add({
-            //     date: firebase.firestore.FieldValue.serverTimestamp(),
-            //     mobile: props.route.params.phno,
-            //     qid: uuid.v4(),
-            //     question: question
-            // })
-            // .then(()=> {
-            //     var details = props.route.params;
-            //     details.message = 'Question added !!!!';
-            //     navigate('Home', details);
-            // })
-            // .catch((err)=> {
-            //     console.log(err);
-            // })
-            var details = props.route.params;
-            details.message = 'Question added !!!!';
-            navigate('Home', details);
+            db.collection("questions").add({
+                date: firebase.firestore.FieldValue.serverTimestamp(),
+                mobile: props.route.params.phno,
+                qid: uuid.v4(),
+                question: question
+            })
+            .then(()=> {
+                var details = props.route.params;
+                alert('Question is added !!!!');
+                navigate('Home', details);
+            })
+            .catch((err)=> {
+                console.log(err);
+            })
         }
         else {
             alert('Please write the question in the given text field');

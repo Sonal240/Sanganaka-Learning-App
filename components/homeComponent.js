@@ -71,7 +71,6 @@ export default function SimpleBottomNavigation(props) {
 
     props.navigation.addListener('beforeRemove', (e)=> {
         if(!e.data.action.payload) {
-            console.log('prevented')
             e.preventDefault();
         }
     })

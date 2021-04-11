@@ -105,7 +105,7 @@ export default function AllQuestions(props) {
             updateItems(items+20);
             console.log(items);
             var art=[];
-            db.collection('questions').orderBy('timestamp', 'desc').limit(items).get().then(async (snapshot)=> {
+            db.collection('questions').orderBy('date', 'desc').limit(items).get().then(async (snapshot)=> {
                 if(snapshot.docs.length) {
                     art = await Promise.all(snapshot.docs.map(async (doc) => {
                         await db.collection('users').where('phno', '==', doc.data().mobile).get().then((snapshot)=> {
