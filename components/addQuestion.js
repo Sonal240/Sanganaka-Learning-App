@@ -19,8 +19,10 @@ export default function AddQuestion(props) {
             db.collection("questions").add({
                 date: firebase.firestore.FieldValue.serverTimestamp(),
                 mobile: props.route.params.phno,
-                qid: uuid.v4(),
                 question: question
+            })
+            .then((docRef)=> {
+                db.collection('questions').doc(docRef.id).set({qid: docRef.id}, {merge: true})
             })
             .then(()=> {
                 var details = props.route.params;

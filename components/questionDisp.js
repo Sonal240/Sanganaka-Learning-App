@@ -9,6 +9,7 @@ import { Button } from 'react-native';
 export default function questionDisp(props) {
     const db = firebase.firestore();
     const ques= props.route.params.ques;
+    const mainUser= props.route.params.user;
     const navigate = props.navigation.navigate;
     let [answers, updateAns] = React.useState(null);
     let [newAnswer, updateNewAns] = React.useState(null);
@@ -41,7 +42,8 @@ export default function questionDisp(props) {
                     main = {
                         userInfo: user,
                         answer: data.answer,
-                        selected: data.selected
+                        selected: data.selected,
+                        created: data.created
                     }
                     return main;
                 })):null;
@@ -54,7 +56,8 @@ export default function questionDisp(props) {
                             main[0] = {
                                 userInfo: main[i].user,
                                 answer: main[i].answer,
-                                selected: main[i].selected
+                                selected: main[i].selected,
+                                created: main[i].created
                             };
                             main[i]= temp;
                         }
@@ -97,7 +100,7 @@ export default function questionDisp(props) {
                             >
                                 <TouchableOpacity
                                     onPress={()=> {
-                                        info = item.userInfo;
+                                        var info = item.userInfo;
                                         navigate('userDisp', info);
                                     }}
                                 >
@@ -157,12 +160,85 @@ export default function questionDisp(props) {
         }
 
     }
-    const subAns = () => {
-        if(!sub) {
-            // updateSub(true);
-            console.log(newAnswer);
+
+
+
+    const subAns = async () => {
+        if(!sub && fetched && newAnswer != null && newAnswer != '') {
+            updateSub(true);
+            var temp = answers;
+            var answered = null;
+            var id = null;
+            if(temp) {
+                temp = await temp.map((item)=> {
+                    return(
+                        {
+                            answer: item.answer,
+                            created: item.created,
+                            mobile: item.userInfo.mobile,
+                            selected: item.selected
+                        }
+                    )
+                });
+                temp.push({
+                        answer: newAnswer,
+                        selected: false,
+                        mobile: mainUser.phno,
+                        created: temp.length
+                    }
+                )
+                temp = {
+                    qid: ques.qid,
+                    username_and_answers: temp
+                }
+            }
+            else {
+                temp = {
+                    qid: ques.qid,
+                    username_and_answers: [{
+                        answer: newAnswer,
+                        selected: false,
+                        mobile: mainUser.phno,
+                        created: 0
+                    }]
+                }
+            }
+            await db.collection('answers').doc(ques.qid).set(temp, {merge: true})
+            .then (async () => {
+                    await db.collection('users').where('phno', '==', mainUser.phno).get().then((snapshot)=> {
+                            answered= snapshot.docs[0].data().answered;
+                            id= snapshot.docs[0].id;
+                        })
+                        .then(async ()=> {
+                            if(answered && !answered.includes(ques.qid)) {
+                                answered.push(ques.qid)
+                                await db.collection('users').doc(id).set({answered: answered}, {merge: true})
+                            }
+                            else if(!answered) {
+                                answered = [ques.qid]
+                                await db.collection('users').doc(id).set({answered: answered}, {merge: true})
+                                .catch((err)=> {
+                                    console.log(err);
+                                })
+                            }
+                        })
+                        .catch((err)=> {
+                            console.log(err);
+                        })
+                }
+            )
+            .catch((err)=> {
+                console.log(err)
+            })
+            updateSub(false);
+            updateAns(null);
+            updateFetch(false);
+            fetchAnswers();
         }
     }
+
+
+
     return (
         <View>
             <View
@@ -177,7 +253,7 @@ export default function questionDisp(props) {
             >
                 <TouchableOpacity
                     onPress={()=> {
-                                info = ques.user;
+                                var info = ques.user;
                                 navigate('userDisp', info);
                             }}
                 >
@@ -215,14 +291,15 @@ export default function questionDisp(props) {
                 style={{
                     paddingLeft: 10,
                     paddingRight: 10,
-                    paddingBottom: 50
+                    paddingBottom: 50,
+                    height: '63%'
                 }}
             >
                 <Answers ques={ques} />
             </ScrollView>
             <View 
                 style={{
-                    width: '100%'
+                    width: '100%',
                 }}
             >
                 <TextInput 
@@ -238,7 +315,9 @@ export default function questionDisp(props) {
                     value={newAnswer}
                     onChangeText={(text)=> {updateNewAns(text)}}
                 />
+                
                 <Button onPress= {subAns} title="Submit Answer" />
+                
             </View>
         </View>
     );

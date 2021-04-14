@@ -10,7 +10,8 @@ var i=1;
 
 function DisplayList(props) {
     const details = {
-        ques: props.question
+        ques: props.question,
+        user: props.propsc.route.params
     }
     return (
         <TouchableOpacity
