@@ -92,7 +92,9 @@ export default function Profile(props) {
     }
     const navigate= props.navigation.navigate;
     const submit = () => {
+        console.log('enterted the function')
         if(!sub) {
+            console.log('enterted the function if')
             setSub(true);
             setRefreshing(true);
             var details= {
@@ -107,18 +109,18 @@ export default function Profile(props) {
             user.updateProfile({
                 displayName: name
             })
-            .then(
-                user.updateEmail(email)
+            .then(async () => {
+                console.log('changing Email')
+                await user.updateEmail(email)
+            }
             )
-            .then(
-                db.collection("users").doc(id).set(details)
+            .then(async () => {
+                await db.collection("users").doc(id).set(details, { merge: true })
+            }
             )
             .then(()=> {
                     setRefreshing(false);
                     setSub(false);
-                    console.log("everything Uploaded")
-                    console.log("The function is:-")
-                    console.log(navigate)
                     navigate('welcome', {isChanges: true});
                 }
             )

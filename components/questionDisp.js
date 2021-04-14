@@ -2,6 +2,8 @@ import React from 'react';
 import { ScrollView, Text, View, TouchableOpacity, Image } from 'react-native';
 import firebase from 'firebase';
 import { Loading } from './LoadingComponent';
+import { TextInput } from 'react-native';
+import { Button } from 'react-native';
 
 
 export default function questionDisp(props) {
@@ -9,7 +11,9 @@ export default function questionDisp(props) {
     const ques= props.route.params.ques;
     const navigate = props.navigation.navigate;
     let [answers, updateAns] = React.useState(null);
+    let [newAnswer, updateNewAns] = React.useState(null);
     let [fetched, updateFetch] = React.useState(false);
+    let [sub, updateSub] = React.useState(false);
 
     const Answers = (props) => {
         const fetchAnswers = async () => {
@@ -153,6 +157,12 @@ export default function questionDisp(props) {
         }
 
     }
+    const subAns = () => {
+        if(!sub) {
+            // updateSub(true);
+            console.log(newAnswer);
+        }
+    }
     return (
         <View>
             <View
@@ -210,6 +220,26 @@ export default function questionDisp(props) {
             >
                 <Answers ques={ques} />
             </ScrollView>
+            <View 
+                style={{
+                    width: '100%'
+                }}
+            >
+                <TextInput 
+                    style= {{
+                        backgroundColor: '#fff',
+                        height: 50,
+                        borderWidth: 1,
+                        paddingLeft: 10,
+                        paddingRight: 10
+                    }}
+                    variant='outlined' 
+                    placeholder= "Enter your Answer here..."
+                    value={newAnswer}
+                    onChangeText={(text)=> {updateNewAns(text)}}
+                />
+                <Button onPress= {subAns} title="Submit Answer" />
+            </View>
         </View>
     );
 }
