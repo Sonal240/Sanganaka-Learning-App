@@ -4,6 +4,7 @@ import firebase from 'firebase';
 import { Loading } from './LoadingComponent';
 import { TextInput } from 'react-native';
 import { Button } from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 
 
 export default function questionDisp(props) {
@@ -15,6 +16,7 @@ export default function questionDisp(props) {
     let [newAnswer, updateNewAns] = React.useState(null);
     let [fetched, updateFetch] = React.useState(false);
     let [sub, updateSub] = React.useState(false);
+    let [tick, updateTick] = React.useState({});
 
     const Answers = (props) => {
         const fetchAnswers = async () => {
@@ -52,9 +54,14 @@ export default function questionDisp(props) {
                 if(main) {
                     for(var i=0; i<main.length; i++) {
                         if(main[i].selected) {
+
+                            var temp2 = {};
+                            temp2[main[i].created] = true;
+                            updateTick(temp2);
+
                             var temp = main[0];
                             main[0] = {
-                                userInfo: main[i].user,
+                                userInfo: user,
                                 answer: main[i].answer,
                                 selected: main[i].selected,
                                 created: main[i].created
@@ -65,8 +72,8 @@ export default function questionDisp(props) {
                 }
             })
             .then(()=> {
-                    updateFetch(true);
                     updateAns(main);
+                    updateFetch(true);
                 }
             )
             .catch((err)=> {
@@ -81,6 +88,57 @@ export default function questionDisp(props) {
         }, []); //replecating componentDidMount Behaviour
         const handlePress = () => {
             console.log('I am called')  
+        }
+
+        const selectCheckbox = async (item) => {
+            if(!sub) {
+                updateSub(true);
+                var temp = {};
+                temp[item.created] = !item.selected;
+                updateTick(temp);
+
+                var details = await answers.map((item2)=> {
+                    if(item2.created == item.created) {
+                        return(
+                            {
+                                answer: item2.answer,
+                                created: item2.created,
+                                mobile: item2.userInfo.mobile,
+                                selected: !item2.selected
+                            }
+                        )
+                    }
+                    else {
+                        return(
+                            {
+                                answer: item2.answer,
+                                created: item2.created,
+                                mobile: item2.userInfo.mobile,
+                                selected: false
+                            }
+                        )
+                    }
+                });
+
+                details = {
+                    qid: ques.qid,
+                    username_and_answers: details
+                }
+
+                await db.collection('answers').doc(ques.qid).set(details)
+                .then(()=> {
+                    updateSub(false);
+                })
+                .catch((err)=> {
+                    console.log(err);
+                });
+                
+
+                updateAns(null);
+                updateFetch(false);
+                fetchAnswers();
+                
+            }
         }
 
         if(answers) {
@@ -98,6 +156,21 @@ export default function questionDisp(props) {
                                     paddingBottom: 10
                                 }}
                             >
+                                {mainUser.phno == ques.user.mobile?<CheckBox 
+                                    value= {tick[item.created]}
+                                    onValueChange= {()=>{
+                                        selectCheckbox(item)
+                                    }}
+                                    tintColors = {{
+                                        true: '#007aff'
+                                    }}
+                                />:item.selected?<CheckBox 
+                                    value= {tick[item.created]}
+                                    disabled = {true}
+                                    tintColors = {{
+                                        true: '#007aff'
+                                    }}
+                                />:null}
                                 <TouchableOpacity
                                     onPress={()=> {
                                         var info = item.userInfo;
@@ -230,10 +303,10 @@ export default function questionDisp(props) {
             .catch((err)=> {
                 console.log(err)
             })
-            updateSub(false);
             updateAns(null);
             updateFetch(false);
             fetchAnswers();
+            updateSub(false);
         }
     }
 
