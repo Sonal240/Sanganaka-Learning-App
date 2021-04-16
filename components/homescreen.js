@@ -12,7 +12,8 @@ function ItemQuestion(props){
             <TouchableOpacity
                 onPress={()=> {
                     var details = {
-                        ques: props.all
+                        ques: props.all,
+                        user: props.propsc.route.params
                     }
                     props.propsc.navigation.navigate('question', details)
                 }}
@@ -80,8 +81,6 @@ function ItemArticles(props){
 export default function Homescreen(props) {
     const preventDefault = (event) => event.preventDefault();
     let [message, updateMess] = React.useState(props.route.params?props.route.params.message:null);
-    console.log('WATCH MEEEEE')
-    console.log(props.route.params)
     if(message) {
         alert(message);
         updateMess(null)
@@ -122,61 +121,76 @@ export default function Homescreen(props) {
     const fetchQuestions = () => {
         var i=0;
         var art=[];
+        var temp;
+        var temp2;
         var art2=[];
         var arr = [];
-        db.collection('questions').orderBy('date').limit(5).get().then((snapshot)=> {
-            snapshot.docs.map((doc) => {
-                db.collection('users').where('phno', '==', doc.data().mobile).get().then((snapshot)=> {
-                    art.push(
-                        {
-                            question: doc.data().question,
-                            qid: doc.data().qid,
-                            mobile: doc.data().mobile,
-                            user: {
-                                photo: snapshot.docs[0].data().photo,
+        db.collection('questions').orderBy('date', 'desc').limit(5).get().then(async (snapshotInitial)=> {
+            art = await Promise.all(snapshotInitial.docs.map(async (doc) => {
+                if(doc.data().mobile) {
+                    await db.collection('users').where('phno', '==', doc.data().mobile).get().then((snapshot)=> {
+                        temp = {
+                                question: doc.data().question,
+                                qid: doc.data().qid,
                                 mobile: doc.data().mobile,
-                                dob: snapshot.docs[0].data().dob?new Date(snapshot.docs[0].data().dob.seconds * 1000):null,
-                                lol: snapshot.docs[0].data().lol,
-                                gender: snapshot.docs[0].data().gender,
-                                name: snapshot.docs[0].data().name,
-                                email: snapshot.docs[0].data().email
+                                user: {
+                                    photo: snapshot.docs[0].data().photo,
+                                    mobile: doc.data().mobile,
+                                    dob: snapshot.docs[0].data().dob?new Date(snapshot.docs[0].data().dob.seconds * 1000):null,
+                                    lol: snapshot.docs[0].data().lol,
+                                    gender: snapshot.docs[0].data().gender,
+                                    name: snapshot.docs[0].data().name,
+                                    email: snapshot.docs[0].data().email
+                                }
                             }
-                        }
-                    )
-                })
-                .catch((err)=> {
-                    console.log(err)
-                })
-                db.collection('answers').where('qid', '==', doc.data().qid).get().then((snapshot)=> {
-                    snapshot.docs[0].data().username_and_answers.map((data)=> {
-                            db.collection('users').where('phno', '==', data.mobile).get().then(async (snapshot2)=> {
-                                await arr.push({
-                                            answer: data.answer,
-                                            selected: data.selected,
-                                            dob: snapshot2.docs[0].data().dob,
-                                            mobile: snapshot2.docs[0].data().phno,
-                                            photo: snapshot2.docs[0].data().photo,
-                                            username: snapshot2.docs[0].data().name,
-                                            email: snapshot2.docs[0].data().email,
-                                            lol: snapshot2.docs[0].data().lol,
-                                            gender: snapshot2.docs[0].data().gender
-                                        })
-                                await art2.push(
-                                    {
-                                        qid: snapshot.docs[0].data().qid,
-                                        allAnswers: arr
-                                    }
-                                )
-                                console.log(art2);
-                                updateAns(art2);
-                            })
-                        })
-                })
-                .catch(err=> {console.log(err)})
-            })
+                    })
+                    .catch((err)=> {
+                        console.log(err)
+                    })
+                    return temp;
+                }
+            }))
+            art2 = await Promise.all(snapshotInitial.docs.map(async (doc) => {
+                if(doc.data().qid) {
+                    await db.collection('answers').where('qid', '==', doc.data().qid).get().then(async (snapshot)=> {
+                            arr = await Promise.all(snapshot.docs[0].data().username_and_answers.map(async (data)=> {
+                                    await db.collection('users').where('phno', '==', data.mobile).get().then(async (snapshot2)=> {
+                                        if(data.selected) {
+                                            for(var j=0; j<art.length; j++) {
+                                                if(art[j].qid===doc.data().qid) {
+                                                    art[j].selected = true;
+                                                }
+                                            }
+                                        }
+                                        temp2 = {
+                                                    answer: data.answer,
+                                                    selected: data.selected,
+                                                    dob: snapshot2.docs[0].data().dob,
+                                                    mobile: snapshot2.docs[0].data().phno,
+                                                    photo: snapshot2.docs[0].data().photo,
+                                                    username: snapshot2.docs[0].data().name,
+                                                    email: snapshot2.docs[0].data().email,
+                                                    lol: snapshot2.docs[0].data().lol,
+                                                    gender: snapshot2.docs[0].data().gender
+                                                }
+                                    })
+                                    .catch((err)=> {
+                                        console.log(err)
+                                    })
+                                    return temp2;
+                                }))
+                    })
+                    .catch(err=> {console.log(err)})
+                    return ({
+                        qid: doc.data().qid,
+                        allAnswers: arr
+                    })
+                }
+            }))
         })
         .then(()=> {
             updateQues(art);
+            updateAns(art2);
         })
         .catch((err)=> {
             console.log(err);
@@ -252,12 +266,14 @@ export default function Homescreen(props) {
                             >
                                 {
                                     questions!=null&&answers!=null?questions.map((item)=> 
-                                        answers.map((item2)=>
+                                        item.selected?answers.map((item2)=>
                                         item2.qid===item.qid?
                                         item2.allAnswers.map((item3)=>
-                                        item3.selected?(<ItemQuestion all={item} propsc={props} title={item.question} userName={item3.username} answer={item3.answer} photo={item3.photo} />):(<ItemQuestion title={item.question} userName={'No one'} answer={'No answers selected as correct yet'} photo={null} />)
-                                        ):null
-                                        )
+                                        item3.selected?(<ItemQuestion all={item} propsc={props} title={item.question} userName={item3.username} answer={item3.answer} photo={item3.photo} />)
+                                        :(null)
+                                        ):(null)
+                                        ):
+                                        (<ItemQuestion title={item.question} all={item} propsc={props} userName={'No one'} answer={'No answers selected as correct yet'} photo={null} />)
                                     ):((<Loading />))
                                 }
                             </ScrollView>
