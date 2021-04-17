@@ -92,9 +92,7 @@ export default function Profile(props) {
     }
     const navigate= props.navigation.navigate;
     const submit = () => {
-        console.log('enterted the function')
         if(!sub) {
-            console.log('enterted the function if')
             setSub(true);
             setRefreshing(true);
             var details= {

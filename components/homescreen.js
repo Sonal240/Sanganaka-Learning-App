@@ -119,7 +119,6 @@ export default function Homescreen(props) {
         })
     }
     const fetchQuestions = () => {
-        var i=0;
         var art=[];
         var temp;
         var temp2;
