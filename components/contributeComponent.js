@@ -2,18 +2,15 @@ import React from 'react';
 import { View, Text, ScrollView, Image, TextInput, Button, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import * as ImagePicker from 'expo-image-picker';
-import { Loading } from './LoadingComponent';
-import Topbar from './topbar';
 import firebase from 'firebase';
-import { RefreshControl } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { Icon } from 'react-native-elements';
 
 
 
-export default function Profile(props) {
+export default function Contribute(props) {
     var user = firebase.auth().currentUser;
     const db = firebase.firestore();
-
+    
     const [content, setContent]= React.useState(null);
     const [topic, setTopic]= React.useState(null);
     const [images, setPic]= React.useState(null);
@@ -25,7 +22,7 @@ export default function Profile(props) {
     let [refreshing, setRefreshing] = React.useState(false);
     let [sub, setSub] = React.useState(false);
 
-
+    
     const openImagePickerAsync = async () => {
         let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -46,25 +43,56 @@ export default function Profile(props) {
         var reader = new FileReader();
         reader.readAsDataURL(blob); 
         reader.onloadend = function() {
-            var base64data = reader.result;          
-            setPic(base64data);
+            var base64data = reader.result;
+            var arr = images?images:[];
+            arr.push(base64data);
+            setPic([...arr]);
         }
+    }
 
+    const deleteImage = (index) => {
+        var arr = images;
+        arr[index] = null;
+        setPic([...arr]);
     }
 
     const navigate= props.navigation.navigate;
-    const submit = () => {
+    const details = props.route.params;
+
+    const submit = async () => {
         console.log('enterted the function')
         if(!sub) {
-            
+            console.log('In if');
+            setSub(true);
+            var vids = await videos?(videos.split(',')):null;
+            var arts = await articles?videos.split(','):null;
+            db.collection('newArticles').add({
+                articles: arts,
+                category: category,
+                content: content,
+                credits: credits,
+                images: images,
+                videos: vids,
+                subBy: user.displayName,
+                phno: user.phoneNumber,
+                topic: topic,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                category: category,
+                interest: interest
+
+            })
+            .then((docRef)=> {
+                db.collection('newArticles').doc(docRef.id).set({id: docRef.id}, {merge: true})
+            })
+            .then(()=> {
+                alert('Article is submited for review');
+                setSub(false);
+            })
+            .catch((err)=> {
+                console.log(err);
+            })
         }
     }
-    
-    const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate || date;
-        setShow(false);
-        setDob(currentDate);
-    };
 
         return (
             <View>
@@ -74,16 +102,6 @@ export default function Profile(props) {
                         paddingBottom: 150
                     }}
                 >    
-                    {/* <TouchableOpacity 
-                        onPress= {()=> {
-                            openImagePickerAsync()
-                        }}
-                    >
-                        <Image
-                            source={!photo?require('./images/user.png'):{uri: photo}}
-                            style={{width: 200, marginTop: 40, height: 200, resizeMode: 'contain'}}
-                        />
-                    </TouchableOpacity> */}
                     <Text style={{marginTop: 40}}>Topic:-</Text>
                     <TextInput 
                         style={{ height: 60, textAlign: 'center',
@@ -110,6 +128,52 @@ export default function Profile(props) {
                         multiline = {true}
                         numberOfLines = {6}
                     />
+                    <ScrollView 
+                        horizontal= {true}
+                        showsHorizontalScrollIndicator={false}
+                        scrollEventThrottle={200}
+                        decelerationRate="normal"
+                        style={{
+                            marginTop: 10
+                        }}
+                        contentContainerStyle= {{
+                            paddingBottom: 10,
+                            paddingTop: 10
+                        }}
+                    >
+                        {
+                            images?(images.length?(images.map((item, index)=> {
+                                if(item) {
+                                    return (
+                                        <View>
+                                            <Icon 
+                                                type= "antdesign"
+                                                name=  "closecircle"
+                                                onPress = {()=> {deleteImage(index)}}
+                                            />
+                                            <Image
+                                                source={{uri: item}}
+                                                style={{width: 200, height: 200, resizeMode: 'contain'}}
+                                            />
+                                        </View>
+                                    )
+                                }
+                            })):null):null
+                        }
+
+                    </ScrollView>
+                    <View
+                        style={{
+                            width: '80%',
+                            paddingBottom: 10,
+                            paddingTop: 10
+                        }}
+                    >
+                        <Button 
+                            title= "Add Image"
+                            onPress= {openImagePickerAsync}
+                        />
+                    </View>
                     <Text>Interests:-</Text>
                     <TextInput 
                         style={{ height: 60, textAlign: 'center',

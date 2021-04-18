@@ -80,36 +80,48 @@ export default function SimpleBottomNavigation(props) {
             <Drawer.Navigator >
                 <Drawer.Screen name="Home"
                 initialParams={{ 
-                            info: props.route.params,
+                            info: details,
                         }}
                     component={Tabs} />
                 <Drawer.Screen name="Profile"
                     initialParams={{ 
-                            info: props.route.params,
+                            info: details,
                         }}
                     component={Tabs} />
                 <Drawer.Screen name="Q&A" 
                     initialParams={{ 
-                            info: props.route.params,
+                            info: details,
                         }}
+                    options= {{
+                        unmountOnBlur: true
+                    }}
                     component={Tabs} />
                 <Drawer.Screen name="Chat"
                     initialParams={{ 
-                            info: props.route.params,
+                            info: details,
                         }}
                     component={Tabs} />
                 <Drawer.Screen name="Contribute" 
+                    options= {{
+                        unmountOnBlur: true
+                    }}
                     initialParams={{ 
-                            info: props.route.params,
+                            info: details,
                         }}
                     component={Contribute} />
                 <Drawer.Screen name="Contact Us" 
+                    options= {{
+                            unmountOnBlur: true
+                        }}
                     initialParams={{ 
-                            info: props.route.params,
+                            info: details,
                         }}
                     component={Homescreen} />
                 <Drawer.Screen name="Logout" 
-                    component={LogOut} />
+                    component={LogOut}
+                    options= {{
+                        unmountOnBlur: true
+                    }} />
             </Drawer.Navigator>
             
 

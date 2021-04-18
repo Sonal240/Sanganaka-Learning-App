@@ -79,7 +79,7 @@ function ItemArticles(props){
     }
 
 export default function Homescreen(props) {
-    const preventDefault = (event) => event.preventDefault();
+    // const preventDefault = (event) => event.preventDefault();
     let [message, updateMess] = React.useState(props.route.params?props.route.params.message:null);
     if(message) {
         alert(message);
