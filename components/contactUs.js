@@ -1,12 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, Image, TextInput, Button, TouchableOpacity } from 'react-native';
-import { Picker } from '@react-native-community/picker';
-import * as ImagePicker from 'expo-image-picker';
-import { Loading } from './LoadingComponent';
-import Topbar from './topbar';
-import firebase from 'firebase';
-import { RefreshControl } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { View, Text, ScrollView, Image } from 'react-native';
 
 
 
