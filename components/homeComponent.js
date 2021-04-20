@@ -9,6 +9,7 @@ import {
 
 import Tabs from './tabComponent';
 import LogOut from './logout';
+import ContactUs from './contactUs';
 
 
 
@@ -116,7 +117,7 @@ export default function SimpleBottomNavigation(props) {
                     initialParams={{ 
                             info: details,
                         }}
-                    component={Homescreen} />
+                    component={ContactUs} />
                 <Drawer.Screen name="Logout" 
                     component={LogOut}
                     options= {{
