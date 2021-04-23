@@ -8,8 +8,12 @@ import WelcomeScreen from './components/WelcomeScreenComponent';
 import LogInScreen from './components/LoginPhoneNumber';
 import Article from './components/articleDisplay';
 import Signup from './components/SignUpComponent';
+import ArticleList from './components/cardList';
+import Question from './components/questionDisp';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as firebase from 'firebase';
+import ProfileShow from './components/userDisp';
+import AddQuestion from './components/addQuestion';
 
 
 
@@ -24,7 +28,11 @@ const config = {
   appId: "1:891657383270:web:8c5be227feed61ed8aeca7",
   measurementId: "G-VLFG4CWX78"
 };
-firebase.initializeApp(config);
+if (!firebase.apps.length) {
+   firebase.initializeApp(config);
+}else {
+   firebase.app(); // if already initialized, use that one
+}
 
 const Stack = createStackNavigator();
 
@@ -74,7 +82,35 @@ export default function App() {
           name="article"
           component={Article}
           options= {{
-            headerShown: false
+            title: 'View Article'
+          }}
+        />
+        <Stack.Screen
+          name="question"
+          component={Question}
+          options= {{
+            title: 'View Question'
+          }}
+        />
+        <Stack.Screen
+          name="userDisp"
+          component={ProfileShow}
+          options= {{
+            title: 'View User'
+          }}
+        />
+        <Stack.Screen
+          name="articles"
+          component={ArticleList}
+          options= {{
+            title: 'View Articles'
+          }}
+        />
+        <Stack.Screen
+          name="questionAdd"
+          component={AddQuestion}
+          options= {{
+            title: 'Add a Question'
           }}
         />
         

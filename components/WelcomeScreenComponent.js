@@ -8,6 +8,9 @@ import { Dimensions } from "react-native";
 
 const screenWidth = Math.round(Dimensions.get('window').width);
  export default function WelcomeScreen(props){
+     props.navigation.addListener('beforeRemove', (e)=> {
+        e.preventDefault();
+    })
     const slide_image_detail=[
         {
             id:1,
@@ -42,6 +45,40 @@ const screenWidth = Math.round(Dimensions.get('window').width);
 
      return(
         <View style={styles.container}>
+            <View
+                style={{
+                    backgroundColor: '#44b',
+                    marginTop: 40,
+                    height: 40,
+                    width: '100%',
+                    justifyContent: 'center',
+                    alignContent: 'center',
+                    display:props.route.params?'flex':'none'
+                }}
+            >
+                <Text style={{
+                    display:props.route.params?props.route.params.isRecentSigned?'flex':'none':'none',
+                    backgroundColor: '#44b',
+                    color: '#fff',
+                    textAlign: 'center'
+                }}>
+                    Your account has been Created please login again!!!
+                </Text>
+                <Text style={{
+                    display:props.route.params?props.route.params.isChanges?'flex':'none':'none',
+                    backgroundColor: '#44b',
+                    color: '#fff'
+                }}>
+                    Changes in account have been made please sign in to continue...
+                </Text>
+                <Text style={{
+                    display:props.route.params?props.route.params.isLoggedOut?'flex':'none':'none',
+                    backgroundColor: '#44b',
+                    color: '#fff'
+                }}>
+                    You have successfully Logged Out !!!!
+                </Text>
+            </View>
             <ScrollView 
                 horizontal= {true}
                 contentContainerStyle={{ width: `${100 * 3}%` }}
