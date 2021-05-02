@@ -40,7 +40,7 @@ export default function SignUp(props) {
     }
 
     setPic({ localUri: pickerResult.uri });
-    const response = await fetch(photo.localUri);
+    const response = await fetch(pickerResult.uri);
     const blob = await response.blob();
     var reader = new FileReader();
     reader.readAsDataURL(blob); 
@@ -59,13 +59,15 @@ export default function SignUp(props) {
   }
   const navigate= props.navigation.navigate;
   const submit=()=> {
-    user.updateEmail(email).then(() => {
-      console.log("emailchanged")
+    user.updateProfile({
+      displayName: name
     })
     .then(
-    user.updateProfile({
-    displayName: name
-    }))
+    user.updateEmail(email)
+    )
+    .then(() => {
+      console.log("emailchanged")
+    })
     .then(function() {
       console.log("Name changed")
     })
@@ -73,21 +75,22 @@ export default function SignUp(props) {
       db.collection("users").add({
                 photo: b64,
                 lol: levelOfLearning,
-                phno: user.phoneNumber
-            }).then(()=> {
-                console.log("data uploaded");
-                var details={}
-                details.name = user.displayName;
-                details.email = user.email;
-                details.phno = user.phoneNumber;
-                details.photo = b64;
-                details.lol = levelOfLearning;
-                navigate('home', details);
-            })
-            .catch(err=> {
-              console.log(err)
+                phno: user.phoneNumber,
+                name: name,
+                email: email
             })
     )
+    .then(()=> {
+          console.log("data uploaded");
+          var details={}
+          details.name = user.displayName;
+          details.email = user.email;
+          details.phno = user.phoneNumber;
+          details.photo = b64;
+          details.lol = levelOfLearning;
+          navigate('welcome', {isRecentSigned: true});
+        }
+      )
     .catch(function(error) {
       console.log(error);
     });
@@ -102,31 +105,34 @@ export default function SignUp(props) {
         <TextInput style={{ height: 60, textAlign: 'center',
           width: '60%', borderColor: 'gray', 
           borderWidth: 1, fontSize: 20,
-        marginTop: 20,
-        borderColor: 'blue', color: 'blue'}} 
-        variant='outlined' 
-        placeholder='Name' 
-        onChangeText={text=> setName(text)}
-        autoCompleteType="username" />
+          marginTop: 20,
+          borderColor: 'blue', color: 'blue'}} 
+          variant='outlined' 
+          placeholder='Name' 
+          onChangeText={text=> setName(text)}
+          autoCompleteType="username" 
+        />
         <TextInput style={{ height: 60, marginTop: 20, 
-        marginBottom: 20, borderColor: 'gray', 
-        borderWidth: 1, width: '60%',
-        fontSize: 20, textAlign: 'center',
-        borderColor: 'blue', color: 'blue' }} 
-        variant='outlined' 
-        placeholder='Email' 
-        onChangeText={text=> setEmail(text)}
-        autoCompleteType= "email" />
+          marginBottom: 20, borderColor: 'gray', 
+          borderWidth: 1, width: '60%',
+          fontSize: 20, textAlign: 'center',
+          borderColor: 'blue', color: 'blue' }} 
+          variant='outlined' 
+          placeholder='Email' 
+          onChangeText={text=> setEmail(text)}
+          autoCompleteType= "email" 
+        />
         <Text id='level'>Level of Learning</Text>
-          <Picker 
+        <Picker 
           selectedValue={levelOfLearning} 
           style={{ height: 100, width: '60%' }}
-          onValueChange={(itemValue, itemIndex)=> setLol(itemValue)}>
-            <Picker.item label="none" value="0" />
-            <Picker.item label='Beginner' value="1" />
-            <Picker.item label='Intermediate' value="2" />
-            <Picker.item label='Advanced' value="3" />
-          </Picker>
+          onValueChange={(itemValue, itemIndex)=> setLol(itemValue)}
+        >
+          <Picker.item label="none" value="0" />
+          <Picker.item label='Beginner' value="1" />
+          <Picker.item label='Intermediate' value="2" />
+          <Picker.item label='Advanced' value="3" />
+        </Picker>
         <Button title="Submit" 
         onPress= {submit}
         />

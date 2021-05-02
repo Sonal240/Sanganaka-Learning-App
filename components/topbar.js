@@ -29,42 +29,42 @@ const screenWidth = Math.round(Dimensions.get('window').width);
 
 export default function Topbar({options}) {
 
-    const [state, setState] = React.useState({
-        left: false,
-    });
+    // const [state, setState] = React.useState({
+    //     left: false,
+    // });
 
 
-    const toggleDrawer = (anchor, open) => (event) => {
-        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-            return;
-        }
+    // const toggleDrawer = (anchor, open) => (event) => {
+    //     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+    //         return;
+    //     }
 
-        setState({ ...state, [anchor]: open });
-    };
+    //     setState({ ...state, [anchor]: open });
+    // };
 
     const signout = ()=> {
         firebase.auth().signOut();
         props.navigation.navigate('welcome');
     }
 
-    const list = (anchor) => (
-        <div
-            className={clsx(classes.list, {
-                [classes.fullList]: anchor === 'top' || anchor === 'bottom',
-            })}
-            role="presentation"
-            onClick={toggleDrawer(anchor, false)}
-            onKeyDown={toggleDrawer(anchor, false)}
-        >
-            <List>
-                {['Home', 'Profile', 'Chat', 'Your Questions', 'Contribute', 'Q&As', 'Contact Us', 'Logout'].map((text, index) => (
-                        <ListItem button key={text} selected={text === 'Home' ? true : false} onClick= {text === 'Logout'? signout: console.log('hello')}>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                ))}
-            </List>
-        </div>
-    );
+    // const list = (anchor) => (
+    //     <div
+    //         className={clsx(classes.list, {
+    //             [classes.fullList]: anchor === 'top' || anchor === 'bottom',
+    //         })}
+    //         role="presentation"
+    //         onClick={toggleDrawer(anchor, false)}
+    //         onKeyDown={toggleDrawer(anchor, false)}
+    //     >
+    //         <List>
+    //             {['Home', 'Profile', 'Chat', 'Your Questions', 'Contribute', 'Q&As', 'Contact Us', 'Logout'].map((text, index) => (
+    //                     <ListItem button key={text} selected={text === 'Home' ? true : false} onClick= {text === 'Logout'? signout: console.log('hello')}>
+    //                         <ListItemText primary={text} />
+    //                     </ListItem>
+    //             ))}
+    //         </List>
+    //     </div>
+    // );
     return (
         <View
             style={{
@@ -73,7 +73,10 @@ export default function Topbar({options}) {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 width: screenWidth,
-                marginTop: 20
+                marginTop: 20,
+                backgroundColor: '#fff',
+                paddingLeft: 12,
+                paddingRight: 12
             }}
         >
             <Icon 
